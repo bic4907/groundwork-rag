@@ -13,7 +13,7 @@ Python 프로젝트입니다. 로컬 Ollama와 원격 모델 API를 지원합니
 - 문장 경계 청킹, 임베딩 캐시, 체크섬을 가진 불변 벡터 인덱스.
 - Dense / BM25 / Hybrid(RRF) 검색, 근거 기반 생성, 주장별 인용과 exact-quote 검증.
 - 명시적 답변 보류, 출력 수리, API 오류와 보류의 구분.
-- FastAPI 요청·응답 schema 및 단계 SSE streaming.
+- FastAPI 요청·응답 schema, 검색 단계 SSE 및 답변 토큰 streaming, 생성 중지.
 - 질문·근거·문서 탐색·실험·결과 비교·사람 검토를 제공하는 웹 GUI.
 - 전체 Gold Set 단일 명령 평가, 질문별 결과, 범주/split별 지표, paired comparison.
 - 선택적 LLM Judge, 사람-Judge 정합성 측정, 재현성 manifest, GitHub Actions.
@@ -103,8 +103,17 @@ curl http://127.0.0.1:8000/api/qa \
 `insufficient_evidence`를 구분하며 호출·출력 형식 오류는 HTTP 오류로 반환합니다.
 인용 검사 성공은 의미적 정답 보장이 아닙니다.
 
-`POST /api/qa/stream`은 검색/근거/생성/검증 완료를 단계별 SSE로 보냅니다. 토큰 단위
-streaming은 지원하지 않습니다. 화면에 보여주는 최종 답변은 인용 검증을 통과한 결과입니다.
+GUI는 `POST /api/qa/stream`으로 검색 근거를 먼저 표시하고, 모델에서 도착하는 답변 텍스트를
+**검증 전 초안**으로 점진 표시합니다. 생성 완료 후 schema와 인용 ID·원문 구절 검사를
+통과한 결과만 최종 답변으로 확정합니다. **중지** 버튼으로 요청을 취소할 수 있습니다.
+짧은 응답은 제공자에 의해 한 번에 묶여 도착할 수도 있습니다.
+[스트리밍 이벤트와 오류·취소 동작](docs/STREAMING.ko.md)을 참고하세요.
+
+```bash
+curl -N http://127.0.0.1:8000/api/qa/stream \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"Fred Mace played for which English football club in 1919?","config":"hybrid"}'
+```
 
 ## 평가와 실험
 

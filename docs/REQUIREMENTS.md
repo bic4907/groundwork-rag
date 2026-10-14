@@ -13,7 +13,7 @@ possible input or provider has been validated.
 | Evidence citations | Claim/Evidence/Citation schemas; validate_citations | Invalid ID and quote tests; live evidence trace |
 | Explicit abstention | GeneratedAnswer invariant and prompt | No-answer Gold cases; failure-aware metrics |
 | Environment-based secrets | Settings; .env.example; .gitignore | Local key file ignored; API never returns keys |
-| Streaming | POST /api/qa/stream | Stage SSE; final validated answer (not token streaming) |
+| Streaming | POST /api/qa/stream | Stage + token SSE; provisional draft, validated final answer, cancellation; test_streaming.py |
 | Gold set >=20, summary and reasoning | data/gold.jsonl | 40 questions, 4 categories, grouped splits |
 | Construction, bias and limitations | DATASETS.ko.md; data/NOTICE.md | Provenance attached per question |
 | At least two quality metrics | evaluation.py | Evidence recall, full-evidence rate, token F1, abstention |

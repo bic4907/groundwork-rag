@@ -30,8 +30,8 @@
 - The browser reported an actual 1280-pixel layout even after requesting a mobile
   viewport override. Desktop layout was inspected; mobile rendering is not claimed
   as visually verified. Responsive CSS is present.
-- Hosted provider requests were verified with mock transports, not with a live paid
-  credential. The local providers were exercised with real models.
+- Initial hosted-provider verification used mock transports. Live OpenRouter streaming
+  verification is recorded below; the original full benchmarks used local models.
 - No human review labels were fabricated or submitted by the agent. Human alignment
   remains pending until a person performs the review.
 - The Dockerfile has not been built or run. The supported verified setup uses uv.
@@ -74,3 +74,21 @@ Partial runs are never presented as completed experiments.
   `docs/images/sufficiency-comparison.jpg`. Console inspection found no errors/warnings.
 - Paired prediction audit confirmed identical retrieved chunks, scores and ordering for
   all 15 questions. Dev-only public report export completed successfully.
+
+## Token streaming addition
+
+- 39 offline tests passed, including incremental Unicode/escape parsing, SSE comments,
+  CRLF and multiline frames, terminal usage, Ollama NDJSON, stream truncation, in-band
+  errors, no replay after partial delivery, citation repair, gate bypass, API event
+  ordering and disconnect cancellation. JavaScript syntax and diff checks passed.
+- Live OpenRouter Sonnet call with the sufficiency configuration: first draft at
+  4.251s, final answer at 4.820s; Stalybridge Celtic, one validated citation. Gate usage
+  1961/190 input/output tokens; answer usage 2013/143. This short response produced
+  one draft event; streaming does not guarantee one event per token.
+- Live GUI summary query visibly showed incomplete text under “생성 중 · 검증 전”,
+  then a final answer with two citations. Clicking a citation expanded its source.
+  A separate request stopped during draft generation discarded the draft and enabled
+  another question. Inspected browser logs contained no errors or warnings.
+- Screenshot: `docs/images/token-streaming.jpg`. These integration checks are not a
+  full Sonnet quality benchmark or a controlled latency comparison.
+- Main localhost:8000 server restarted after all saved evaluation runs completed.

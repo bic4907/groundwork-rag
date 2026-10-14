@@ -142,9 +142,11 @@ short_answer와 claims 사이의 의미적 일치도 역시 Judge와 사람 검�
 ## 6. API와 GUI: api.py, web/
 
 - `POST /api/qa`: Pydantic 요청·응답 schema, 동기 JSON 응답.
-- `POST /api/qa/stream`: retrieving/evidence/generating/answer/error/done 단계 SSE.
-  토큰 단위 streaming이 아니라 **단계 streaming**이다. 인용 검증이 끝난 최종 답변만
-  표시해 미검증 부분 답변 노출을 줄인다.
+- `POST /api/qa/stream`: 검색 단계 + 답변 토큰 SSE. `streaming.py`가 부분 JSON에서
+  답변 텍스트만 추출해 `draft`로 전송한다. GUI는 검증 전 표시를 붙이며 최종 `answer`만
+  schema와 인용 검증을 통과한 결과다. 검증 실패 시 초안을 폐기하고 한 번 수정한다.
+  bounded queue, heartbeat, 연결 해제 감지와 협력적 취소를 지원한다.
+  [이벤트 계약 및 취소 한계](STREAMING.ko.md)를 참고한다.
 - `/api/corpus`, `/api/gold`: 출처와 평가 기준 조회.
 - `/api/jobs`: ingest/eval/experiment를 제한된 background worker에서 수행.
 - `/api/runs`, `/api/compare`: 원본 결과와 조건 검증된 비교.

@@ -59,15 +59,37 @@ function renderAnswer(result) {
   $('answer-area').innerHTML=`<article class="answer-card"><div class="answer-heading"><span class="eyebrow">${answered?'GROUNDED RESPONSE':'INSUFFICIENT EVIDENCE'}</span><span class="badge ${answered?'':'warning'}">${answered?'인용 검증됨':'답변 보류'}</span></div>${answered?`<p class="short-answer">${escapeHTML(result.short_answer)}</p>${claims}`:`<h2>문서에서 충분한 근거를 찾지 못했습니다.</h2><p>${escapeHTML(result.reason)}</p>`}${gateHTML}<div class="answer-footer"><span>${(result.timings.total_ms/1000).toFixed(2)}s total</span><span>${Math.round(result.timings.retrieval_ms)}ms retrieval</span><span>${result.retrieval.length} chunks</span><span>${escapeHTML(result.config)}</span></div><p class="fine">${answered?'인용 ID와 원문 구절을 검증했습니다. 의미적 뒷받침 여부는 별도 평가 대상입니다.':'답변을 보류했습니다. 보류가 적절했는지는 별도 평가 대상입니다.'}</p></article>`;
 }
 $('answer-area').addEventListener('click',e=>{const b=e.target.closest('[data-citation]');if(!b)return;document.querySelectorAll('.source').forEach(s=>s.classList.remove('selected'));const target=$('source-'+b.dataset.citation);if(target){target.classList.add('selected');target.querySelector('details').open=true;target.scrollIntoView({behavior:'smooth',block:'nearest'});}});
+let activeQuestion = null;
+function renderDraft(data) {
+  $('answer-area').innerHTML=`<article class="answer-card draft-card"><div class="answer-heading"><span class="eyebrow">LIVE DRAFT</span><span class="badge warning" id="draft-status">생성 중 · 검증 전</span></div>${data.short_answer?`<p class="short-answer">${escapeHTML(data.short_answer)}</p>`:''}${data.claims.map(text=>`<p>${escapeHTML(text)}</p>`).join('')}${data.reason?`<p>${escapeHTML(data.reason)}</p>`:''}<p class="fine">아직 검증하지 않은 초안입니다. 완료 후 답변과 인용이 수정될 수 있습니다.</p></article>`;
+}
+$('stop-answer').addEventListener('click',()=>activeQuestion?.abort());
 $('ask-form').addEventListener('submit',async e=>{
-  e.preventDefault();notice('');buttonBusy($('ask-button'),true,'검색 중…');stage('질문에 관련된 근거를 찾고 있습니다.');
+  e.preventDefault();if(activeQuestion)return;
+  const controller=new AbortController();activeQuestion=controller;
+  notice('');buttonBusy($('ask-button'),true,'검색 중…');$('stop-answer').hidden=false;
+  evidence([]);stage('질문에 관련된 근거를 찾고 있습니다.');
+  let reader;
   try {
-    const response=await api('/qa/stream',{method:'POST',body:JSON.stringify({question:$('question').value.trim(),config:$('query-config').value})});
-    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',terminal=false;
-    function handle(block){const event=block.split('\n').find(l=>l.startsWith('event: '))?.slice(7);const raw=block.split('\n').find(l=>l.startsWith('data: '))?.slice(6);if(!raw)return;const data=JSON.parse(raw);if(event==='evidence')evidence(data.hits);if(event==='checking_sufficiency'){stage('검색된 근거만으로 답할 수 있는지 확인하고 있습니다.');$('ask-button').textContent='근거 확인 중…';}if(event==='generating'){stage('찾은 문서로 답변을 작성하고 인용을 검증하고 있습니다.');$('ask-button').textContent='답변 작성 중…';}if(event==='answer'){renderAnswer(data);terminal=true;}if(event==='error'){terminal=true;throw new Error(data.detail);}}
-    while(true){const {done,value}=await reader.read();buffer+=decoder.decode(value||new Uint8Array(),{stream:!done});let end;while((end=buffer.indexOf('\n\n'))>=0){const block=buffer.slice(0,end);buffer=buffer.slice(end+2);handle(block);}if(done)break;}
-    if(!terminal)throw new Error('응답 연결이 종료되었습니다. 다시 시도하세요.');
-  }catch(error){$('answer-area').innerHTML=`<div class="error-box">${escapeHTML(error.message)}</div>`;}finally{buttonBusy($('ask-button'),false,'질문하기 ↗');}
+    const response=await api('/qa/stream',{method:'POST',signal:controller.signal,body:JSON.stringify({question:$('question').value.trim(),config:$('query-config').value})});
+    reader=response.body.getReader();const decoder=new TextDecoder();let buffer='',terminal=false;
+    function handle(block){
+      const lines=block.split('\n');const event=lines.find(l=>l.startsWith('event:'))?.slice(6).trim();
+      const raw=lines.filter(l=>l.startsWith('data:')).map(l=>l.slice(5).replace(/^ /,'')).join('\n');
+      if(!raw)return;const data=JSON.parse(raw);
+      if(event==='evidence')evidence(data.hits);
+      if(event==='checking_sufficiency'){stage('검색된 근거만으로 답할 수 있는지 확인하고 있습니다.');$('ask-button').textContent='근거 확인 중…';}
+      if(event==='generating'||event==='draft_reset'){stage('답변 초안을 생성하고 있습니다.');$('ask-button').textContent='답변 작성 중…';}
+      if(event==='draft')renderDraft(data);
+      if(event==='validating'){if($('draft-status'))$('draft-status').textContent='인용 검증 중';else stage('인용을 검증하고 있습니다.');$('ask-button').textContent='검증 중…';}
+      if(event==='repairing'){stage('초안의 인용 또는 형식에 문제가 있어 다시 작성하고 있습니다.');$('ask-button').textContent='수정 중…';}
+      if(event==='answer'){renderAnswer(data);terminal=true;$('stop-answer').hidden=true;}
+      if(event==='error')throw new Error(data.detail);
+    }
+    while(true){const {done,value}=await reader.read();buffer+=decoder.decode(value||new Uint8Array(),{stream:!done});buffer=buffer.replace(/\r\n/g,'\n');let end;while((end=buffer.indexOf('\n\n'))>=0){handle(buffer.slice(0,end));buffer=buffer.slice(end+2);}if(buffer.length>1048576)throw new Error('응답 크기 제한을 초과했습니다.');if(done)break;}
+    if(!terminal)throw new Error('응답이 완료되기 전에 연결이 종료됐습니다. 초안은 확정되지 않았습니다.');
+  }catch(error){$('answer-area').innerHTML=`<div class="error-box">${escapeHTML(controller.signal.aborted?'요청을 중지했습니다. 검증 전 초안은 폐기했습니다.':error.message)}</div>`;}
+  finally{controller.abort();if(reader)await reader.cancel().catch(()=>{});activeQuestion=null;$('stop-answer').hidden=true;buttonBusy($('ask-button'),false,'질문하기 ↗');}
 });
 
 async function loadCorpus(){const q=$('corpus-search').value;const data=await json(`/corpus?q=${encodeURIComponent(q)}&offset=${corpusOffset}&limit=12`);corpusTotal=data.total;$('corpus-meta').textContent=`${data.total} documents · Historical snapshot · CC BY-SA 4.0`;$('corpus-list').innerHTML=data.documents.map(d=>`<article class="corpus-doc"><span class="eyebrow">PUBLIC DOCUMENT</span><h2>${escapeHTML(d.title)}</h2><p>${escapeHTML(d.sentences[0]?.text||'')}</p><details><summary>${d.sentences.length}개 문장과 ID 확인</summary>${d.sentences.map(s=>`<div class="sentence"><code>${escapeHTML(s.id)}</code><p>${escapeHTML(s.text)}</p></div>`).join('')}<p><a href="${escapeHTML(d.url)}" target="_blank" rel="noopener noreferrer">Wikipedia 출처 ↗</a></p></details></article>`).join('')||'<p class="fine">검색 결과가 없습니다.</p>';$('corpus-page').textContent=`${data.total?corpusOffset+1:0}–${Math.min(corpusOffset+12,data.total)} / ${data.total}`;$('corpus-prev').disabled=corpusOffset===0;$('corpus-next').disabled=corpusOffset+12>=data.total;}

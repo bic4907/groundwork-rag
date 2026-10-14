@@ -1,4 +1,5 @@
 """One-origin workbench. Model credentials never enter a response."""
+import asyncio
 import hmac
 import json
 import queue
@@ -16,7 +17,7 @@ from pydantic import BaseModel, Field
 from .evaluation import calibration, compare_runs, evaluate, run_folder
 from .io import digest, read_jsonl, write_json
 from .pipeline import Pipeline
-from .providers import Models, ProviderError
+from .providers import Models, ProviderError, StreamCancelled, check_cancelled
 from .retrieval import ingest
 from .schemas import QueryRequest, QueryResponse
 from .settings import ROOT, CONFIG_NAMES, ConfigName, Settings, load_config
@@ -83,30 +84,59 @@ def qa(request: QueryRequest):
 
 
 @app.post('/api/qa/stream')
-def qa_stream(request: QueryRequest):
-    events = queue.Queue()
+def qa_stream(request: QueryRequest, http_request: Request):
+    events = queue.Queue(maxsize=64)
+    cancelled = threading.Event()
+
+    def emit(stage, payload):
+        while True:
+            check_cancelled(cancelled)
+            try:
+                events.put((stage, payload), timeout=0.2)
+                return
+            except queue.Full:
+                continue
 
     def work():
         try:
+            check_cancelled(cancelled)
             result = Pipeline(load_config(request.config), Models(Settings())).answer(
-                request.question, lambda stage, payload: events.put((stage, payload)))
-            events.put(('answer', result))
+                request.question, emit, stream=True, cancelled=cancelled)
+            emit('answer', result)
+        except StreamCancelled:
+            return
         except Exception as exc:
-            events.put(('error', {'detail': str(exc) if isinstance(exc, (ProviderError, FileNotFoundError)) else type(exc).__name__}))
-        finally:
-            events.put(('done', {}))
+            if not cancelled.is_set():
+                try:
+                    emit('error', {'detail': str(exc) if isinstance(exc, (ProviderError, FileNotFoundError)) else type(exc).__name__})
+                except StreamCancelled:
+                    return
+        try:
+            emit('done', {})
+        except StreamCancelled:
+            pass
 
-    pool.submit(work)
+    future = pool.submit(work)
 
-    def stream():
-        while True:
-            try:
-                event, payload = events.get(timeout=15)
-                yield f'event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n'
-                if event == 'done':
+    async def stream():
+        last_event = time.monotonic()
+        try:
+            while True:
+                if await http_request.is_disconnected():
                     break
-            except queue.Empty:
-                yield ': keep-alive\n\n'
+                try:
+                    event, payload = await asyncio.to_thread(events.get, True, 0.5)
+                    yield f'event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n'
+                    last_event = time.monotonic()
+                    if event == 'done':
+                        break
+                except queue.Empty:
+                    if time.monotonic() - last_event >= 15:
+                        yield ': keep-alive\n\n'
+                        last_event = time.monotonic()
+        finally:
+            cancelled.set()
+            future.cancel()
     return StreamingResponse(stream(), media_type='text/event-stream', headers={'X-Accel-Buffering': 'no'})
 
 
