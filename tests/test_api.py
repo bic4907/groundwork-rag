@@ -23,7 +23,8 @@ def test_workbench_and_readonly_routes_do_not_expose_credentials():
 
 def test_api_rejects_path_traversal_invalid_config_and_bad_question():
     assert client.post('/api/qa',json={'question':'Who is this?','config':'../../.env'}).status_code==422
-    assert client.post('/api/qa',json={'question':'a'}).status_code==422
+    for question in ('', '  ', 'a'*2001):
+        assert client.post('/api/qa',json={'question':question}).status_code==422
     assert client.get('/api/runs/invalid-run').status_code==400
     assert client.get('/api/corpus?limit=10000').status_code==400
 
@@ -41,6 +42,7 @@ def test_sufficiency_configuration_and_trace_are_exposed(monkeypatch):
     from groundwork import api
     from groundwork.schemas import QueryRequest
     assert QueryRequest(question='Who is the author?', config='sufficient').config == 'sufficient'
+    assert QueryRequest(question=' ㅎㅇ ').question == 'ㅎㅇ'
     assert 'sufficient' in {c['name'] for c in client.get('/api/status').json()['configs']}
     assert api.JobRequest(kind='experiment', after_config='sufficient').after_config == 'sufficient'
     from test_pipeline import pipeline_with_responses, decision
@@ -48,7 +50,7 @@ def test_sufficiency_configuration_and_trace_are_exposed(monkeypatch):
     p = pipeline_with_responses([decision(False)])
     p.config = load_config('sufficient')
     monkeypatch.setattr(api, 'Pipeline', lambda *_: p)
-    r = client.post('/api/qa', json={'question': 'When was the algorithm written?', 'config': 'sufficient'})
+    r = client.post('/api/qa', json={'question': 'ㅎㅇ', 'config': 'sufficient'})
     assert r.status_code == 200
     assert r.json()['sufficiency']['sufficient'] is False
     assert r.json()['sufficiency_prompt_sha256']

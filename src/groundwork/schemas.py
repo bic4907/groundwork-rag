@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field, StrictBool, model_validator
+from pydantic import BaseModel, Field, StrictBool, field_validator, model_validator
 
 from .settings import ConfigName
 
@@ -69,8 +69,13 @@ class GeneratedAnswer(BaseModel):
 
 
 class QueryRequest(BaseModel):
-    question: str = Field(min_length=3, max_length=2000)
+    question: str = Field(min_length=1, max_length=2000)
     config: ConfigName = 'hybrid'
+
+    @field_validator('question', mode='before')
+    @classmethod
+    def trim_question(cls, value):
+        return value.strip() if isinstance(value, str) else value
 
 
 class RetrievalHit(BaseModel):

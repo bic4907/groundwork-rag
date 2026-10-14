@@ -7,12 +7,22 @@ const labels = {evidence_recall:'Evidence recall',all_evidence_found:'All eviden
 
 function notice(text) { $('notice').textContent = text; $('notice').hidden = !text; }
 function fail(error) { notice(error.message || String(error)); }
+function requestError(detail, status) {
+  if (typeof detail === 'string') return detail;
+  if (Array.isArray(detail) && detail.length) return detail.map(item=>{
+    const field=item.loc?.at(-1);
+    if(field==='question' && item.type==='string_too_short') return '질문을 입력해 주세요.';
+    if(field==='question' && item.type==='string_too_long') return '질문은 2,000자 이하로 입력해 주세요.';
+    return `${field==='question'?'질문':field==='config'?'파이프라인':field||'입력값'}: ${item.msg||'입력값을 확인해 주세요.'}`;
+  }).join(' ');
+  return `요청 실패 (${status})`;
+}
 async function api(path, options={}) {
   const headers = {'Content-Type':'application/json', ...(options.headers || {})};
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
   const response = await fetch('/api'+path, {...options, headers});
   if (response.status === 401) { $('auth-dialog').showModal(); throw new Error('앱 접근 토큰을 입력하세요.'); }
-  if (!response.ok) { const body = await response.json().catch(()=>({})); throw new Error(typeof body.detail === 'string' ? body.detail : `요청 실패 (${response.status})`); }
+  if (!response.ok) { const body = await response.json().catch(()=>({})); throw new Error(requestError(body.detail, response.status)); }
   return response;
 }
 async function json(path, options) { return (await api(path, options)).json(); }
@@ -66,6 +76,7 @@ function renderDraft(data) {
 $('stop-answer').addEventListener('click',()=>activeQuestion?.abort());
 $('ask-form').addEventListener('submit',async e=>{
   e.preventDefault();if(activeQuestion)return;
+  if(!$('question').value.trim())return notice('질문을 입력해 주세요.');
   const controller=new AbortController();activeQuestion=controller;
   notice('');buttonBusy($('ask-button'),true,'검색 중…');$('stop-answer').hidden=false;
   evidence([]);stage('질문에 관련된 근거를 찾고 있습니다.');
