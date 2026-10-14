@@ -5,7 +5,7 @@
 문서 기반 RAG QA, 인용 추적 GUI, Gold Set 평가, 통제된 검색 개선 실험을 제공하는
 Python 프로젝트입니다. 로컬 Ollama와 원격 모델 API를 지원합니다.
 
-![실제 평가 실행의 Before/After 비교](docs/images/experiment-comparison.jpg)
+![실제 평가 실행의 Before/After 비교](docs/images/sonnet-comparison.jpg)
 
 ## 포함된 기능
 
@@ -121,8 +121,11 @@ curl -N http://127.0.0.1:8000/api/qa/stream \
 # 전체 40개 질문을 한 명령으로 평가
 uv run groundwork eval --config baseline --split all
 
-# Dense → Hybrid 통제 실험, test split 비교까지 한 번에
-uv run groundwork experiment --split all
+# 네 방식을 차례로 평가하고 각각 Dense와 비교 (총 160문항)
+uv run groundwork benchmark --split all
+
+# 두 방식만 지정해 비교
+uv run groundwork experiment --before baseline --after sufficient --split all
 
 # 두 저장된 실행 비교
 uv run groundwork compare --before RUN_A --after RUN_B --split test
@@ -145,19 +148,31 @@ Abstention Precision/Recall/F1, Error Rate입니다. 선택적으로 의미적 J
 Citation Support를 계산합니다. **Token F1은 의미적 정답성이 아니며, Citation Validity는
 논리적 뒷받침이 아닙니다.** 상세 분모와 blind spot은 평가 문서에 설명했습니다.
 
-### 첫 개선 실험
+### Sonnet 기준 일괄 평가
 
-- **Hypothesis:** 정확한 이름·표현을 검색하는 BM25를 Dense에 RRF로 결합하면 근거
-  회수율과 답변 품질이 개선될 수 있다.
-- **Control:** 모델, 데이터, 청킹, top-k=6, 문맥 본문 16,000자, 생성 설정 및 prompt 고정.
-- **Result:** 두 설정에서 각 40개 질문을 실제 실행했습니다. test 25개에서 Evidence Recall은
-  **95.0% → 92.5%**, Answer Token F1은 **43.49% → 47.28%**였습니다.
-  [측정 표](reports/local-v1/METRICS.md)와 [원인 분석](reports/local-v1/ANALYSIS.ko.md)을 공개했습니다.
-- **Analysis:** lexical distractor가 bridge 문서를 밀어내 recall이 하락한 사례가 있었습니다.
-  전체 no-answer 8개 중 올바른 보류는 양쪽 모두 1개로 낮았습니다. Token F1 상승을 의미적
-  정답성 향상으로 간주하지 않으며, 이 로컬 baseline의 보류 신뢰성은 아직 부족합니다.
-- **Next steps:** 다중 문서 추론용 반복 검색, reranker, 독립 Judge와 실제 사람 검수,
-  한국어/도메인 데이터, 더 큰 holdout 및 반복 실행.
+GUI **Experiments → 전체 방식 순차 평가**를 누르면 **Dense → BM25 → Hybrid →
+Dense+Sufficiency** 순서로 실행합니다. 선택한 split을 각 방식에 적용하며, 기본 All은
+40문항 × 4방식 = 160문항입니다. Configuration은 단일 평가와 Before/After에 적용합니다.
+화면에 현재 방식, 방식별 진행률과 전체 진행률을 표시하고, 완료 후 실행 기록을 갱신합니다.
+[일괄 평가 사용법](docs/BENCHMARK.ko.md)을 참고하세요.
+CLI의 `benchmark`도 같은 경로를 사용하며 `runtime/suites/`에 진행·완료·실패 상태를
+저장합니다. 이전 결과 삭제는 자동으로 수행하지 않습니다.
+
+현재 공개 평가의 생성·충분성 모델은 OpenRouter **`anthropic/claude-sonnet-5.5`**,
+임베딩은 로컬 Nomic입니다. 각 방식 40문항을 실제 실행했습니다.
+
+| 방식 | Test 근거 회수율 | Test 답변 F1 | Test 오류율 | Test 중앙 지연 |
+| --- | ---: | ---: | ---: | ---: |
+| Dense | 95.00% | 58.13% | 0.00% | 2.82s |
+| BM25 | 78.33% | 37.20% | 0.00% | 3.03s |
+| Hybrid (RRF) | 92.50% | 41.08% | 0.00% | 2.86s |
+| Dense + Sufficiency | 95.00% | 47.67% | 0.00% | 5.09s |
+
+Test는 25문항이며 답변 F1 분모는 답변 가능한 20문항입니다. 오류·보류도 F1에 포함합니다.
+이전 개발에서 살펴본 test를 다시 사용한 회귀 평가로, 새로운 독립 holdout이 아닙니다.
+의미적 정답성 및 인용의 의미적 뒷받침은 이번에 Judge/사람 검토로 측정하지 않았습니다.
+[전체 측정 표](reports/sonnet-v1/METRICS.md)와
+[차이·실패·비용 분석](reports/sonnet-v1/ANALYSIS.ko.md)을 참고하세요.
 
 ## 구조와 문서
 
@@ -225,6 +240,5 @@ GUI의 Configuration에서 `Dense + Sufficiency gate`를 선택한 뒤 Before/Af
 실행하면 됩니다. 개발 결과 비교에는 Compare runs의 Split을 Development로 선택하세요.
 [구현 의도·연구 출처·지표·한계](docs/SUFFICIENCY.ko.md)를 참고하세요.
 
-첫 개발 비교에서는 과도한 보류와 출력 계약 오류로 **답변 F1이 33.01% → 0%**로
-하락했습니다. 기본 설정으로 승격하지 않았습니다.
-[측정 결과와 실패 분석](reports/sufficiency-v1/ANALYSIS.ko.md)을 함께 공개합니다.
+현재 Sonnet 평가에서는 동일 Dense 검색 문맥에서 gate의 비용·지연·답변률 변화를
+비교합니다. [최신 결과와 분석](reports/sonnet-v1/ANALYSIS.ko.md)을 확인하세요.

@@ -82,9 +82,12 @@ Development 실행끼리도 비교할 수 있다. 답변에는 충분성 판정�
 risk–coverage 곡선이나 calibration을 측정했다고 주장하지 않는다. 해당 실험은 더 많은
 레이블과 보정 절차가 준비되면 추가한다.
 
-## 첫 실행 결과
+## 현재 Sonnet 평가
 
-개발 15개씩 비교한 결과 새 설정은 12개를 보류하고 3개에서 출력 계약 오류가 났으며,
-정상 답변을 생성하지 못했다. 전체 답변 F1은 33.01% → 0%였다. 기존 Dense/Hybrid
-기본 동작을 바꾸지 않고 비교용 설정으로 유지한다.
-[결과와 실패 분석](../reports/sufficiency-v1/ANALYSIS.ko.md)을 확인할 수 있다.
+전체 40문항에서 Dense와 Sufficiency를 비교하고, BM25와 Hybrid도 같은 모델로 평가했다.
+이전 실행의 숫자는 현재 보고서에서 제거했다.
+[Sonnet 결과·실패·비용 분석](../reports/sonnet-v1/ANALYSIS.ko.md)과
+[전체 측정 표](../reports/sonnet-v1/METRICS.md)를 확인할 수 있다.
+
+모든 방식을 한 번에 실행하려면 `uv run groundwork benchmark --split all` 또는
+GUI의 **전체 방식 순차 평가**를 사용한다.

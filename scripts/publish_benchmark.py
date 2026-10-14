@@ -10,7 +10,7 @@ from groundwork.settings import ROOT
 parser=argparse.ArgumentParser()
 parser.add_argument('--before',required=True)
 parser.add_argument('--after',required=True)
-parser.add_argument('--name',default='local-v1')
+parser.add_argument('--name',default='benchmark-v1')
 parser.add_argument('--split', choices=('all','dev','test'), action='append',
                     help='Splits to export; repeat for multiple. Default: all, dev, test.')
 args=parser.parse_args()
@@ -35,7 +35,7 @@ for run_id in (args.before,args.after):
 for split,comparison in comparisons.items():
     write_json(target/f'comparison-{split}.json',comparison)
 table=['# Measured benchmark comparison','',f'Before: `{args.before}`',f'After: `{args.after}`','',
-       'These are actual local model executions. Null semantic scores were not measured.',
+       'These are actual model executions. Null semantic scores were not measured.',
        'Predictions contain only public benchmark questions and source excerpts (CC BY-SA 4.0).','']
 for split,result in comparisons.items():
     table.extend([f'## {split} ({result["n"]} questions)','', '| Metric | Before | After | Delta (pp) |','| --- | ---: | ---: | ---: |'])

@@ -26,3 +26,5 @@ uv run groundwork benchmark --split all
 동일 질문·인덱스·생성 모델·프롬프트·문맥/출력 예산이 일치해야 비교할 수 있다.
 실행 중 `.env` 또는 평가 설정을 바꾸지 않는다. 비용은 사용량이 반환된 생성/판정 호출의
 추정치이며, 의미적 정확도와 사람 정합성은 별도 Judge/사람 평가가 필요하다.
+
+![전체 방식 실행 버튼과 Sonnet 기록](images/sonnet-comparison.jpg)

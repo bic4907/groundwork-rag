@@ -1,0 +1,586 @@
+{
+  "before": "20261014T092943Z-baseline-871232",
+  "after": "20261014T093156Z-sufficient-3f68bf",
+  "split": "dev",
+  "n": 15,
+  "metrics": {
+    "evidence_recall": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": [
+        0.0,
+        0.0
+      ]
+    },
+    "all_evidence_found": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": [
+        0.0,
+        0.0
+      ]
+    },
+    "answer_token_f1": {
+      "before": 0.5728021849509962,
+      "after": 0.5496735368223481,
+      "delta": -0.02312864812864812,
+      "delta_ci95_cluster_bootstrap": [
+        -0.06000826446280993,
+        0.0027830339193975454
+      ]
+    },
+    "answer_exact_match": {
+      "before": 0.08333333333333333,
+      "after": 0.08333333333333333,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": [
+        0.0,
+        0.0
+      ]
+    },
+    "citation_validity": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": [
+        0.0,
+        0.0
+      ]
+    },
+    "judge_correctness": {
+      "before": null,
+      "after": null,
+      "delta": null,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "citation_support": {
+      "before": null,
+      "after": null,
+      "delta": null,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_precision": {
+      "before": 0.75,
+      "after": 0.6,
+      "delta": -0.15000000000000002,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_recall": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_f1": {
+      "before": 0.8571428571428571,
+      "after": 0.75,
+      "delta": -0.1071428571428571,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "error_rate": {
+      "before": 0.06666666666666667,
+      "after": 0.0,
+      "delta": -0.06666666666666667,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answer_rate": {
+      "before": 0.6666666666666666,
+      "after": 0.6666666666666666,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "unanswerable_answer_rate": {
+      "before": 0.0,
+      "after": 0.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answerable_abstention_rate": {
+      "before": 0.08333333333333333,
+      "after": 0.16666666666666666,
+      "delta": 0.08333333333333333,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answered_token_f1": {
+      "before": 0.6873626219411955,
+      "after": 0.6596082441868177,
+      "delta": -0.027754377754377724,
+      "delta_ci95_cluster_bootstrap": null
+    }
+  },
+  "changed_settings": {
+    "sufficiency_gate": {
+      "before": false,
+      "after": true
+    }
+  },
+  "usage_before": {
+    "input_tokens": 28115,
+    "output_tokens": 5022,
+    "estimated_cost": 0.10645,
+    "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+  },
+  "usage_after": {
+    "input_tokens": 44793,
+    "output_tokens": 6295,
+    "estimated_cost": 0.152536,
+    "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+  },
+  "model_calls_before": {
+    "answer": 16,
+    "sufficiency": 0
+  },
+  "model_calls_after": {
+    "answer": 10,
+    "sufficiency": 15
+  },
+  "hypothesis": "A separate context-sufficiency gate reduces unsupported answering at the cost of coverage and extra inference, with dense retrieval and the answer generator held fixed.",
+  "latency_before": {
+    "p50": 2773.4431670978665,
+    "p95": 8557.535549812008
+  },
+  "latency_after": {
+    "p50": 4690.778499934822,
+    "p95": 6245.807887567207
+  },
+  "per_question": [
+    {
+      "id": "5ac11037554299294b21907a",
+      "question": "Fred Mace played for which English football club in 1919?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a76db3555429972597f13e7",
+      "question": "When did the first bank come into existence that is part of an organization that serves rural areas of India with basic banking and financial services?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae68e0055429908198fa607",
+      "question": "Tamanchey is a comedy film that starred the actress who works in what type of films?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae1f79f5542997283cd2302",
+      "question": "\"When a Woman Loves\" is the first single by singer R. Kelly from his eleventh studio album named what?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7bd25a554299294a54ab13",
+      "question": "Which director lived longer, Lowell Sherman or Jonathan Kaplan?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": false,
+        "error": true,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7456ec55429979e288290f",
+      "question": "which film came out first, African Cats or Fun and Fancy Free ?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5333333333333333,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae0038655429925eb1afbe0",
+      "question": "Which is a Macedonian weekly, Hänt Extra or Tea Moderna?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.33333333333333337,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.33333333333333337,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a80ae105542992bc0c4a7a2",
+      "question": "What occupation is shared by both Marge Piercy and Richard Aldington?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.4,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.2222222222222222,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ac11037554299294b21907a-summary",
+      "question": "Summarize the main facts about Fred Mace (footballer) in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.7532467532467533,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.7837837837837838,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a76db3555429972597f13e7-summary",
+      "question": "Summarize the main facts about Maharashtra Gramin Bank in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5818181818181818,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.48484848484848486,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7bd25a554299294a54ab13-summary",
+      "question": "Summarize the main facts about Lowell Sherman in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.951219512195122,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.951219512195122,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7456ec55429979e288290f-summary",
+      "question": "Summarize the main facts about African Cats in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9873417721518987,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9873417721518987,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5adf29f05542993344016c09-missing",
+      "question": "Which guitar brand was endorsed by the band centered by Ann and Nancy Wilson?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7cd280554299452d57ba7f-missing",
+      "question": "What star of a Matthew Senreich and Zeb Wells comedy was born in July of 1983?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5abface75542990832d3a196-missing",
+      "question": "Por Baazar contains a cameo by an Indian film director, screenwriter, producer, actor, playback singer, and television host, who was born to Javed Akhtar and who?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    }
+  ],
+  "limitations": "Small sample; cluster bootstrap is descriptive. One generation draw per config unless repeated runs are supplied. No CI reported for ratio metrics."
+}

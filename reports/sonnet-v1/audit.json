@@ -1,0 +1,18 @@
+{
+  "same_retrieval_baseline_sufficient": true,
+  "actual_models": [
+    "anthropic/claude-sonnet-5.5"
+  ],
+  "commits": {
+    "baseline": "0b7b880116de958ad9c97be63e445ce7a364dae7",
+    "bm25": "0b7b880116de958ad9c97be63e445ce7a364dae7",
+    "hybrid": "0b7b880116de958ad9c97be63e445ce7a364dae7",
+    "sufficient": "0b7b880116de958ad9c97be63e445ce7a364dae7"
+  },
+  "dirty": {
+    "baseline": false,
+    "bm25": false,
+    "hybrid": false,
+    "sufficient": false
+  }
+}

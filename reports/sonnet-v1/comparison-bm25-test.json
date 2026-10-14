@@ -1,0 +1,876 @@
+{
+  "before": "20261014T092943Z-baseline-871232",
+  "after": "20261014T093509Z-bm25-334d2e",
+  "split": "test",
+  "n": 25,
+  "metrics": {
+    "evidence_recall": {
+      "before": 0.95,
+      "after": 0.7833333333333333,
+      "delta": -0.16666666666666663,
+      "delta_ci95_cluster_bootstrap": [
+        -0.3240740740740741,
+        -0.03468750000000003
+      ]
+    },
+    "all_evidence_found": {
+      "before": 0.9,
+      "after": 0.6,
+      "delta": -0.30000000000000004,
+      "delta_ci95_cluster_bootstrap": [
+        -0.5298128342245989,
+        -0.05555555555555555
+      ]
+    },
+    "answer_token_f1": {
+      "before": 0.5812950982709048,
+      "after": 0.3720127504553734,
+      "delta": -0.20928234781553134,
+      "delta_ci95_cluster_bootstrap": [
+        -0.3698789308121988,
+        -0.06787020024567464
+      ]
+    },
+    "answer_exact_match": {
+      "before": 0.3,
+      "after": 0.05,
+      "delta": -0.25,
+      "delta_ci95_cluster_bootstrap": [
+        -0.4444444444444444,
+        -0.09090909090909091
+      ]
+    },
+    "citation_validity": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": [
+        0.0,
+        0.0
+      ]
+    },
+    "judge_correctness": {
+      "before": null,
+      "after": null,
+      "delta": null,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "citation_support": {
+      "before": null,
+      "after": null,
+      "delta": null,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_precision": {
+      "before": 1.0,
+      "after": 0.45454545454545453,
+      "delta": -0.5454545454545454,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_recall": {
+      "before": 1.0,
+      "after": 1.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "abstention_f1": {
+      "before": 1.0,
+      "after": 0.625,
+      "delta": -0.375,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "error_rate": {
+      "before": 0.0,
+      "after": 0.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answer_rate": {
+      "before": 0.8,
+      "after": 0.56,
+      "delta": -0.24,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "unanswerable_answer_rate": {
+      "before": 0.0,
+      "after": 0.0,
+      "delta": 0.0,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answerable_abstention_rate": {
+      "before": 0.0,
+      "after": 0.3,
+      "delta": 0.3,
+      "delta_ci95_cluster_bootstrap": null
+    },
+    "answered_token_f1": {
+      "before": 0.5812950982709048,
+      "after": 0.5314467863648191,
+      "delta": -0.04984831190608563,
+      "delta_ci95_cluster_bootstrap": null
+    }
+  },
+  "changed_settings": {
+    "retrieval": {
+      "before": "dense",
+      "after": "bm25"
+    }
+  },
+  "usage_before": {
+    "input_tokens": 44581,
+    "output_tokens": 7069,
+    "estimated_cost": 0.159852,
+    "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+  },
+  "usage_after": {
+    "input_tokens": 44420,
+    "output_tokens": 7223,
+    "estimated_cost": 0.16107,
+    "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+  },
+  "model_calls_before": {
+    "answer": 26,
+    "sufficiency": 0
+  },
+  "model_calls_after": {
+    "answer": 25,
+    "sufficiency": 0
+  },
+  "hypothesis": "Lexical-only ablation measures how much the embedding model contributes.",
+  "latency_before": {
+    "p50": 2815.0330833159387,
+    "p95": 5219.1839831881225
+  },
+  "latency_after": {
+    "p50": 3027.700750157237,
+    "p95": 5186.276524793357
+  },
+  "per_question": [
+    {
+      "id": "5ac3b8b8554299741d48a301",
+      "question": "Which Kevin Costner movie included an actor who also starred in \"Little Big League\"?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5abb8e2d554299642a094aa4",
+      "question": "An actor who appeared in all eight \"American Pie Films\" stared alongside which actor in Armed and Dangerous? ",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.12903225806451613,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.19999999999999998,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a78bd515542990784727749",
+      "question": "The show featuring a young boy named Gerald Bald Z premiered on what TV channel? ",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.2,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.2,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ac43d575542997ea680ca39",
+      "question": " Ravi Khote:has included his music in which 2003 Indian drama?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae10572554299422ee995cd",
+      "question": "What was the name of the storm that was the fifth hurricane of the season where Miami, Florida became the new National Hurricane Center?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae08dad55429945ae9593b9",
+      "question": " Willie Geist frequently serves as fill-in anchor on \"Today\" for a tv journalist that was the host of what show from 1980-86?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5adbe75455429944faac23af",
+      "question": "What record company does distribution for Joan Marie Larkin and Kenny Laguna?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.5,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae4627d5542991a06ce9a4d",
+      "question": "The author of Sexual Politics attended which British University?",
+      "category": "bridge",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.2857142857142857,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.6666666666666666,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.33333333333333337,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ab499a55542996a3a969f9f",
+      "question": "Were Shadows Over Camelot and Battle Sheep released by the same publisher?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.08333333333333333,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.08333333333333333,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ade3bf75542997c77adedb8",
+      "question": "who has written more than 100 books, Yaşar Kemal or Avram Noam Chomsky?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.7499999999999999,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.8,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a865e8a55429960ec39b67a",
+      "question": "Do the bands 3OH!3 and Moonbabies have the same number of members?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.19999999999999998,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.2222222222222222,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a7736d85542994aec3b722b",
+      "question": "Which film director is younger, Manoel de Oliveira or Alfonso Cuarón?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.6666666666666666,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5abd455c55429924427fcf5a",
+      "question": "What does Age of Chance and Vector share in common? ",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.28571428571428575,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ac3d2ac554299741d48a330",
+      "question": "What has Henry Winkler worked as that Norman Foster has not?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.4,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.1111111111111111,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae4be5455429960a22e019c",
+      "question": "Which is a shrub, Mimosa or Cryptocoryne?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.15384615384615385,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.0,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae39fb85542990afbd1e197",
+      "question": "Do both Changle District and Longkou face water?",
+      "category": "comparison",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.125,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 0.5,
+        "all_evidence_found": 0.0,
+        "answer_token_f1": 0.0,
+        "answer_exact_match": 0.0,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ac3b8b8554299741d48a301-summary",
+      "question": "Summarize the main facts about Little Big League in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9354838709677419,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9180327868852458,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5abb8e2d554299642a094aa4-summary",
+      "question": "Summarize the main facts about Armed and Dangerous (1986 film) in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9722222222222222,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ab499a55542996a3a969f9f-summary",
+      "question": "Summarize the main facts about Shadows Over Camelot in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9111111111111111,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.9333333333333333,
+        "answer_exact_match": 0.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ade3bf75542997c77adedb8-summary",
+      "question": "Summarize the main facts about Yaşar Kemal in two sentences, focusing on the first two substantive statements in its document.",
+      "category": "summary",
+      "before": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 1.0,
+        "answer_exact_match": 1.0,
+        "answered": true,
+        "abstained": false,
+        "error": false,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a76648f5542992db9473795-missing",
+      "question": "Figure 2 Ranch Airport supports launch operations of what aerospace manufacturer and space flight services company?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5a80e03e55429938b614222c-missing",
+      "question": "This American film and stage actor played the self-destructive soldier Prewitt in Fred Zinnemann's 1953 film that centers around which event?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae0ff95554299422ee995b0-missing",
+      "question": "What son of Larry Johnson was born on November 19, 1979?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5adc6825554299438c868da1-missing",
+      "question": "The Governor of Santiago del Estero is a citizen of the province that is neighbored by which province on the north?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    },
+    {
+      "id": "5ae6a5d15542991bbc97615d-missing",
+      "question": "Barranca de Yaco is a geographical feature along an ancient road that is approximately how many miles long?",
+      "category": "unanswerable",
+      "before": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      },
+      "after": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "answered": false,
+        "abstained": true,
+        "error": false,
+        "citation_validity": null,
+        "judge_correctness": null,
+        "citation_support": null
+      }
+    }
+  ],
+  "limitations": "Small sample; cluster bootstrap is descriptive. One generation draw per config unless repeated runs are supplied. No CI reported for ratio metrics."
+}
