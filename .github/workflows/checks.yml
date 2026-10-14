@@ -1,0 +1,18 @@
+name: Repository checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run pytest -q
+      - run: node --check src/groundwork/web/app.js
+      - name: Reject committed local environment
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env.example$'; then
+            exit 1
+          fi

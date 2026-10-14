@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ask with evidence. Measure what changes. An inspectable RAG workbench.">
+  <title>Groundwork · Evidence workbench</title>
+  <link rel="stylesheet" href="/assets/style.css"><script src="/assets/app.js" defer></script>
+</head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="Groundwork home"><span class="brand-mark">g.</span> groundwork</a>
+  <div class="workspace"><span class="eyebrow">WORKSPACE</span><strong>Evidence lab <span class="version">01</span></strong><small>질문에서 근거까지, 한눈에.</small></div>
+  <nav aria-label="Main navigation">
+    <button class="nav active" data-view="ask"><span>↗</span> Ask & inspect</button>
+    <button class="nav" data-view="experiments"><span>◫</span> Experiments</button>
+    <button class="nav" data-view="corpus"><span>▤</span> Corpus</button>
+    <button class="nav" data-view="review"><span>✓</span> Human review</button>
+    <button class="nav" data-view="guide"><span>ⓘ</span> Field notes</button>
+  </nav>
+  <div class="side-bottom"><div class="connection"><i id="connection-dot"></i><span id="connection-text">연결 확인 중</span></div><p>근거를 확인하고,<br>변화를 측정하세요.</p><span class="eyebrow">GROUNDWORK / OPEN SOURCE</span></div>
+</aside>
+<main>
+  <header class="topbar"><div>Workspace <span>/</span> <b id="breadcrumb">Ask & inspect</b></div><div class="model-tag" id="model-tag">Connecting…</div></header>
+  <div class="content">
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <section id="view-ask" class="view">
+      <div class="page-heading"><div><div class="eyebrow accent">EVIDENCE-FIRST QUESTION ANSWERING</div><h1>좋은 답변은<br>근거에서 시작합니다<span class="accent">.</span></h1><p class="subtitle">문서에 질문하고, 답변의 출처와 검색 과정을 확인하세요.</p></div><div class="page-index">01 <span>/ WORKBENCH</span></div></div>
+      <div class="stats" id="stats"><div><strong>—</strong><span>source documents</span></div><div><strong>—</strong><span>gold questions</span></div><div><strong>—</strong><span>indexed chunks</span></div><div><strong>3</strong><span>retrieval strategies</span></div></div>
+      <div class="ask-layout">
+        <div>
+          <form id="ask-form" class="question-card"><label for="question" class="eyebrow">YOUR QUESTION</label><textarea id="question" rows="3" maxlength="2000" required minlength="3" placeholder="What would you like to find out?"></textarea><div class="question-footer"><label class="select-wrap">Retrieval <select id="query-config"><option value="hybrid">Hybrid · Dense + BM25</option><option value="baseline">Dense · Baseline</option><option value="bm25">BM25 · Lexical</option></select></label><button class="primary" id="ask-button" type="submit">질문하기 <span>↗</span></button></div></form>
+          <div class="suggestions" id="suggestions"></div>
+          <div id="answer-area" aria-live="polite"><div class="empty-answer"><div class="abstract-mark"><span></span><span></span><span></span></div><h2>답변과 근거를 함께.</h2><p>질문을 입력하면 관련 문서를 검색하고<br>주장별 인용과 응답 과정을 보여드립니다.</p><div class="process"><span>01 Search</span><b>→</b><span>02 Ground</span><b>→</b><span>03 Inspect</span></div></div></div>
+        </div>
+        <aside class="evidence-panel"><div class="panel-title"><h2>Retrieved evidence</h2><span class="count" id="evidence-count">0</span></div><p class="panel-description">모델이 실제로 읽은 문맥입니다.</p><div id="evidence-list"><div class="empty-evidence"><span>▤</span><p>검색된 문서가<br>여기에 나타납니다.</p></div></div></aside>
+      </div>
+    </section>
+    <section id="view-experiments" class="view" hidden>
+      <div class="eyebrow accent">MEASURE BEFORE YOU CHANGE</div><h1>Experiments<span class="accent">.</span></h1><p class="subtitle">같은 질문, 같은 문맥 예산. 검색 방식의 차이를 측정합니다.</p>
+      <div class="experiment-grid"><article class="card"><span class="eyebrow">RUN AN EVALUATION</span><h2>재현 가능한 실험</h2><p>전체 질문의 점수와 실패 사례, 모델 및 데이터 버전을 함께 기록합니다.</p><label>Configuration<select id="eval-config"><option value="baseline">Dense baseline</option><option value="hybrid">Hybrid retrieval</option><option value="bm25">BM25 ablation</option></select></label><label>Question split<select id="eval-split"><option value="dev">Development · 설정 검토용</option><option value="test">Test · 최종 비교용</option><option value="all">All · 전체 평가</option></select></label><label class="check"><input type="checkbox" id="eval-judge"> LLM Judge 사용 (별도 설정 필요)</label><div class="actions"><button class="primary" id="run-eval">평가 실행 ↗</button><button class="secondary" id="run-experiment">Before / After 실험</button></div><div id="job-status" aria-live="polite"></div></article><article class="card experiment-note"><span class="eyebrow">WORKING HYPOTHESIS</span><h2>정확한 이름이<br>검색을 바꿀 수 있을까?</h2><p>의미 검색에 BM25를 추가하면 고유명사와 정확한 표현을 놓치는 문제가 줄어들 수 있습니다.</p><div class="strategy"><span>Dense</span><b>+</b><span>BM25</span><b>→</b><strong>RRF</strong></div><p class="fine">생성 모델·프롬프트·청크 수·문맥 예산은 고정합니다. 점수 상승 여부와 함께 악화된 질문도 확인하세요.</p></article></div>
+      <div class="section-title"><h2>Run history</h2><button class="text-button" id="refresh-runs">새로고침 ↻</button></div><div id="run-history" class="table-wrap"></div>
+      <article class="card comparison-card"><div class="section-title"><h2>Compare runs</h2><span class="eyebrow">PAIRED · TEST SPLIT</span></div><div class="compare-controls"><label>Before<select id="before-run"></select></label><label>After<select id="after-run"></select></label><button class="primary" id="compare-button">비교하기 ↗</button></div><div id="comparison-output"><p class="fine">완료된 두 실행을 선택하세요. 조건이 다른 실험은 비교를 거절합니다.</p></div></article>
+      <div id="run-detail"></div>
+    </section>
+    <section id="view-corpus" class="view" hidden><div class="eyebrow accent">KNOW YOUR SOURCES</div><h1>Corpus<span class="accent">.</span></h1><p class="subtitle">고정된 공개 문서 스냅샷. 원문과 문장 ID까지 확인할 수 있습니다.</p><div class="corpus-toolbar"><label class="search-label" for="corpus-search">문서 검색</label><input id="corpus-search" type="search" placeholder="제목이나 본문 검색…"><button class="secondary" id="rebuild-index">인덱스 준비 ↻</button></div><div class="corpus-meta" id="corpus-meta"></div><div id="corpus-list" class="corpus-grid"></div><div class="pagination"><button class="secondary" id="corpus-prev">← 이전</button><span id="corpus-page"></span><button class="secondary" id="corpus-next">다음 →</button></div></section>
+    <section id="view-review" class="view" hidden><div class="eyebrow accent">KEEP HUMAN JUDGMENT IN THE LOOP</div><h1>Human review<span class="accent">.</span></h1><p class="subtitle">정답 기준과 실제 답변을 읽고 채점하세요. Judge 점수는 제출 후 비교합니다.</p><div class="review-controls"><label>Run<select id="review-run"></select></label><label>Question<select id="review-question"></select></label></div><div id="review-content" class="card"><p>완료된 실행을 선택하면 검토할 답변이 표시됩니다.</p></div><form id="review-form" class="card" hidden><label>정답성<select id="human-correctness"><option value="2">2 · 완전히 정확함</option><option value="1">1 · 부분적으로 정확함</option><option value="0">0 · 틀림 / 답변 누락</option></select></label><label class="check"><input type="checkbox" id="human-faithful"> 모든 주장이 인용 근거에 의해 뒷받침됨</label><label>판단 근거<textarea id="human-notes" rows="3" placeholder="누락된 사실이나 잘못된 인용을 기록하세요."></textarea></label><label class="check"><input type="checkbox" id="human-confirm" required> 근거와 답변을 직접 읽고 채점했습니다.</label><button class="primary" type="submit">검토 저장 ↗</button><div id="calibration-result" aria-live="polite"></div></form></section>
+    <section id="view-guide" class="view" hidden><div class="eyebrow accent">HOW TO READ THIS WORKBENCH</div><h1>Field notes<span class="accent">.</span></h1><p class="subtitle">숫자가 무엇을 말하고, 무엇을 말하지 못하는지.</p><div class="notes-grid"><article class="card"><span class="eyebrow">01 / RETRIEVAL</span><h2>Evidence recall</h2><p>질문에 필요한 정답 근거 문장 중 검색 결과에 포함된 비율입니다. 여러 문서를 연결하는 질문에는 모든 근거를 찾았는지도 함께 봅니다.</p></article><article class="card"><span class="eyebrow">02 / ANSWER</span><h2>Token F1 ≠ 정답성</h2><p>정답과 답변의 단어 중복입니다. 표현이 달라도 맞는 요약을 낮게 평가할 수 있습니다. 의미적 정답성은 별도 Judge와 사람 검토가 필요합니다.</p></article><article class="card"><span class="eyebrow">03 / CITATIONS</span><h2>인용의 존재와 타당성</h2><p>인용 ID와 원문 구절이 실제로 있는지 자동 검증합니다. 그 구절이 주장을 뒷받침하는지는 Citation Support로 별도 평가합니다.</p></article><article class="card"><span class="eyebrow">04 / ABSTENTION</span><h2>모를 때 답하지 않기</h2><p>답이 없는 질문에서 보류했는지, 답할 수 있는 질문까지 보류하지는 않았는지 함께 측정합니다. 호출 오류는 성공한 보류로 계산하지 않습니다.</p></article><article class="card"><span class="eyebrow">05 / REPRODUCIBILITY</span><h2>실행의 흔적</h2><p>모델 식별자, 데이터·프롬프트 해시, 설정, seed, 검색 근거, 응답을 저장합니다. 외부 API는 동일한 seed에서도 결과가 달라질 수 있습니다.</p></article><article class="card"><span class="eyebrow">06 / LIMITATIONS</span><h2>작은 실험의 범위</h2><p>영문 Wikipedia 기반 40개 질문은 전체 사용 환경을 대표하지 않습니다. 요약 변형은 원 질문과 상관이 있어 통계 분석에서 같은 그룹으로 묶습니다.</p></article></div><div class="footnote">Data: HotpotQA · CC BY-SA 4.0 · Original software: MIT<br>문서 링크는 현재 Wikipedia로 연결되며, 평가는 저장된 과거 스냅샷을 사용합니다.</div></section>
+  </div>
+</main>
+<dialog id="auth-dialog"><form id="auth-form"><h2>Workspace access</h2><p>서버에 설정된 앱 접근 토큰을 입력하세요. 모델 API 키가 아닙니다.</p><label>Access token<input id="access-token" type="password" required autocomplete="off"></label><button class="primary">연결</button></form></dialog>
+</body></html>

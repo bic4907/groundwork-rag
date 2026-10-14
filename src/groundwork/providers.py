@@ -93,7 +93,7 @@ class Models:
             raise ProviderError(f'{role}: disabled')
         if provider == 'ollama':
             data = self._request(role, '/api/chat', {
-                'model': model, 'messages': messages, 'stream': False, 'format': schema,
+                'model': model, 'messages': messages, 'stream': False, 'format': 'json',
                 'options': {'temperature': config.temperature, 'seed': config.seed,
                             'num_predict': config.max_output_tokens, 'num_ctx': 8192},
             })
