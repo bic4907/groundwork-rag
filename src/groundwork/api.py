@@ -18,10 +18,10 @@ from .io import digest, read_jsonl, write_json
 from .pipeline import Pipeline
 from .providers import Models, ProviderError
 from .retrieval import ingest
-from .schemas import QueryRequest
+from .schemas import QueryRequest, QueryResponse
 from .settings import ROOT, Settings, load_config
 
-app = FastAPI(title='Groundwork API', version='0.1.0')
+app = FastAPI(title='Groundwork API', version='0.1.0', docs_url=None, redoc_url=None)
 pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix='groundwork')
 job_lock = threading.Lock()
 review_lock = threading.Lock()
@@ -77,7 +77,7 @@ def status():
             'configs': [load_config(x).model_dump() for x in ('baseline', 'hybrid', 'bm25')]}
 
 
-@app.post('/api/qa')
+@app.post('/api/qa', response_model=QueryResponse)
 def qa(request: QueryRequest):
     return Pipeline(load_config(request.config), Models(Settings())).answer(request.question)
 
@@ -121,6 +121,17 @@ def corpus(q: str = '', offset: int = 0, limit: int = 30):
 @app.get('/api/gold')
 def gold():
     return read_jsonl(ROOT / 'data/gold.jsonl')
+
+
+@app.get('/api/gold/{question_id}')
+def gold_detail(question_id: str):
+    case = next((g for g in read_jsonl(ROOT / 'data/gold.jsonl') if g['id'] == question_id), None)
+    if not case:
+        raise HTTPException(404, 'Question not found')
+    required = set(case['required_evidence'])
+    evidence = [{'sentence_id': s['id'], 'text': s['text'], 'title': d['title'], 'url': d['url']}
+                for d in read_jsonl(ROOT / 'data/corpus.jsonl') for s in d['sentences'] if s['id'] in required]
+    return {'case': case, 'evidence': evidence}
 
 
 class JobRequest(BaseModel):
@@ -223,6 +234,11 @@ def save_review(run_id: str, review: HumanReview):
 @app.get('/')
 def home():
     return FileResponse(ROOT / 'src/groundwork/web/index.html')
+
+
+@app.get('/docs', include_in_schema=False)
+def api_reference():
+    return FileResponse(ROOT / 'src/groundwork/web/api-docs.html')
 
 
 app.mount('/assets', StaticFiles(directory=ROOT / 'src/groundwork/web'), name='assets')

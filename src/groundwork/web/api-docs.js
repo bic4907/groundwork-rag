@@ -1,0 +1,4 @@
+'use strict';
+const target=document.getElementById('api-endpoints');
+function block(title,data){const d=document.createElement('details');d.className='run-detail-row';const s=document.createElement('summary');s.textContent=title;const p=document.createElement('pre');p.textContent=JSON.stringify(data,null,2);d.append(s,p);return d;}
+fetch('/openapi.json').then(r=>{if(!r.ok)throw new Error('Cannot load OpenAPI schema');return r.json();}).then(schema=>{for(const [path,operations] of Object.entries(schema.paths)){for(const [method,operation] of Object.entries(operations))target.append(block(`${method.toUpperCase()} ${path} — ${operation.summary||''}`,operation));}for(const [name,definition] of Object.entries(schema.components?.schemas||{}))document.getElementById('api-schemas').append(block(name,definition));}).catch(error=>{target.textContent=error.message;});

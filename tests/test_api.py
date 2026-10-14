@@ -13,6 +13,12 @@ def test_workbench_and_readonly_routes_do_not_expose_credentials():
     assert 'api_key' not in status.text.lower()
     assert 'base_url' not in status.text.lower()
     assert client.get('/api/corpus?limit=2').json()['total']>=20
+    assert client.get('/docs').status_code==200
+    schema=client.get('/openapi.json').json()
+    assert schema['paths']['/api/qa']['post']['responses']['200']['content']['application/json']['schema']['$ref'].endswith('QueryResponse')
+    question=client.get('/api/gold').json()[0]
+    detail=client.get('/api/gold/'+question['id']).json()
+    assert {e['sentence_id'] for e in detail['evidence']}==set(question['required_evidence'])
 
 
 def test_api_rejects_path_traversal_invalid_config_and_bad_question():

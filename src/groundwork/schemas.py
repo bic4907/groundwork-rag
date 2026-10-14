@@ -54,6 +54,34 @@ class QueryRequest(BaseModel):
     config: Literal['baseline', 'hybrid', 'bm25'] = 'hybrid'
 
 
+class RetrievalHit(BaseModel):
+    chunk: Chunk
+    score: float
+    dense_score: float
+    bm25_score: float
+
+
+class Citation(Evidence):
+    claim_index: int
+    document_id: str
+    title: str
+    url: str
+    sentence_ids: list[str]
+
+
+class QueryResponse(GeneratedAnswer):
+    request_id: str
+    answer: str
+    citations: list[Citation]
+    retrieval: list[RetrievalHit]
+    config: str
+    index_id: str
+    prompt_sha256: str
+    timings: dict[str, float]
+    attempts: list[dict]
+    validation: dict
+
+
 class GoldCase(BaseModel):
     id: str
     source_id: str
