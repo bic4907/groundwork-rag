@@ -11,11 +11,15 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--before',required=True)
 parser.add_argument('--after',required=True)
 parser.add_argument('--name',default='local-v1')
+parser.add_argument('--split', choices=('all','dev','test'), action='append',
+                    help='Splits to export; repeat for multiple. Default: all, dev, test.')
 args=parser.parse_args()
 if not args.name.replace('-','').isalnum():
     raise SystemExit('Invalid report directory name')
 gold={x['id']:x for x in read_jsonl(ROOT/'data/gold.jsonl')}
 target=ROOT/'reports'/args.name
+# Validate comparisons before writing a partially exported report.
+comparisons={split:compare_runs(args.before,args.after,split) for split in (args.split or ('all','dev','test'))}
 for run_id in (args.before,args.after):
     folder=run_folder(run_id)
     manifest=json.loads((folder/'manifest.json').read_text())
@@ -28,7 +32,6 @@ for run_id in (args.before,args.after):
     destination.mkdir(parents=True,exist_ok=True)
     for filename in ('manifest.json','predictions.jsonl','summary.json','report.md'):
         shutil.copyfile(folder/filename,destination/filename)
-comparisons={split:compare_runs(args.before,args.after,split) for split in ('all','dev','test')}
 for split,comparison in comparisons.items():
     write_json(target/f'comparison-{split}.json',comparison)
 table=['# Measured benchmark comparison','',f'Before: `{args.before}`',f'After: `{args.after}`','',

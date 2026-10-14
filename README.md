@@ -215,3 +215,7 @@ uv run groundwork experiment --before baseline --after sufficient --split dev
 GUI의 Configuration에서 `Dense + Sufficiency gate`를 선택한 뒤 Before/After를
 실행하면 됩니다. 개발 결과 비교에는 Compare runs의 Split을 Development로 선택하세요.
 [구현 의도·연구 출처·지표·한계](docs/SUFFICIENCY.ko.md)를 참고하세요.
+
+첫 개발 비교에서는 과도한 보류와 출력 계약 오류로 **답변 F1이 33.01% → 0%**로
+하락했습니다. 기본 설정으로 승격하지 않았습니다.
+[측정 결과와 실패 분석](reports/sufficiency-v1/ANALYSIS.ko.md)을 함께 공개합니다.

@@ -1,0 +1,256 @@
+{
+  "n": 15,
+  "answerable_n": 12,
+  "unanswerable_n": 3,
+  "metrics": {
+    "evidence_recall": 1.0,
+    "all_evidence_found": 1.0,
+    "answer_token_f1": 0.33012184033460623,
+    "answer_exact_match": 0.16666666666666666,
+    "citation_validity": 1.0,
+    "judge_correctness": null,
+    "citation_support": null,
+    "abstention_precision": 0.25,
+    "abstention_recall": 0.3333333333333333,
+    "abstention_f1": 0.2857142857142857,
+    "error_rate": 0.0,
+    "answer_rate": 0.7333333333333333,
+    "unanswerable_answer_rate": 0.6666666666666666,
+    "answerable_abstention_rate": 0.25,
+    "answered_token_f1": 0.44016245377947505
+  },
+  "latency_ms": {
+    "p50": 23800.914166960865,
+    "p95": 47826.92170436494
+  },
+  "generation_usage": {
+    "input_tokens": 22909,
+    "output_tokens": 2280,
+    "estimated_cost": null,
+    "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+  },
+  "model_calls_by_stage": {
+    "answer": 19,
+    "sufficiency": 0
+  },
+  "sufficiency": {
+    "decisions": 0,
+    "blocked": 0
+  },
+  "judge_coverage": 0.0,
+  "judge_errors": 0,
+  "by_category": {
+    "bridge": {
+      "n": 4,
+      "answerable_n": 4,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.41666666666666663,
+        "answer_exact_match": 0.25,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.0,
+        "answer_rate": 0.75,
+        "unanswerable_answer_rate": null,
+        "answerable_abstention_rate": 0.25,
+        "answered_token_f1": 0.5555555555555555
+      },
+      "latency_ms": {
+        "p50": 20296.915270388126,
+        "p95": 25822.45838141534
+      },
+      "generation_usage": {
+        "input_tokens": 6434,
+        "output_tokens": 453,
+        "estimated_cost": null,
+        "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+      },
+      "model_calls_by_stage": {
+        "answer": 5,
+        "sufficiency": 0
+      },
+      "sufficiency": {
+        "decisions": 0,
+        "blocked": 0
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "comparison": {
+      "n": 4,
+      "answerable_n": 4,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.25,
+        "answer_exact_match": 0.25,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.0,
+        "answer_rate": 0.75,
+        "unanswerable_answer_rate": null,
+        "answerable_abstention_rate": 0.25,
+        "answered_token_f1": 0.3333333333333333
+      },
+      "latency_ms": {
+        "p50": 26344.65550002642,
+        "p95": 44425.29264818876
+      },
+      "generation_usage": {
+        "input_tokens": 6465,
+        "output_tokens": 692,
+        "estimated_cost": null,
+        "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+      },
+      "model_calls_by_stage": {
+        "answer": 6,
+        "sufficiency": 0
+      },
+      "sufficiency": {
+        "decisions": 0,
+        "blocked": 0
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "summary": {
+      "n": 4,
+      "answerable_n": 4,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.3236988543371522,
+        "answer_exact_match": 0.0,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.0,
+        "answer_rate": 0.75,
+        "unanswerable_answer_rate": null,
+        "answerable_abstention_rate": 0.25,
+        "answered_token_f1": 0.43159847244953625
+      },
+      "latency_ms": {
+        "p50": 33674.47318742052,
+        "p95": 47514.97794564347
+      },
+      "generation_usage": {
+        "input_tokens": 6882,
+        "output_tokens": 957,
+        "estimated_cost": null,
+        "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+      },
+      "model_calls_by_stage": {
+        "answer": 5,
+        "sufficiency": 0
+      },
+      "sufficiency": {
+        "decisions": 0,
+        "blocked": 0
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "unanswerable": {
+      "n": 3,
+      "answerable_n": 0,
+      "unanswerable_n": 3,
+      "metrics": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 1.0,
+        "abstention_recall": 0.3333333333333333,
+        "abstention_f1": 0.5,
+        "error_rate": 0.0,
+        "answer_rate": 0.6666666666666666,
+        "unanswerable_answer_rate": 0.6666666666666666,
+        "answerable_abstention_rate": null,
+        "answered_token_f1": null
+      },
+      "latency_ms": {
+        "p50": 6826.661165803671,
+        "p95": 8959.036079188809
+      },
+      "generation_usage": {
+        "input_tokens": 3128,
+        "output_tokens": 178,
+        "estimated_cost": null,
+        "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+      },
+      "model_calls_by_stage": {
+        "answer": 3,
+        "sufficiency": 0
+      },
+      "sufficiency": {
+        "decisions": 0,
+        "blocked": 0
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    }
+  },
+  "by_split": {
+    "dev": {
+      "n": 15,
+      "answerable_n": 12,
+      "unanswerable_n": 3,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.33012184033460623,
+        "answer_exact_match": 0.16666666666666666,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.25,
+        "abstention_recall": 0.3333333333333333,
+        "abstention_f1": 0.2857142857142857,
+        "error_rate": 0.0,
+        "answer_rate": 0.7333333333333333,
+        "unanswerable_answer_rate": 0.6666666666666666,
+        "answerable_abstention_rate": 0.25,
+        "answered_token_f1": 0.44016245377947505
+      },
+      "latency_ms": {
+        "p50": 23800.914166960865,
+        "p95": 47826.92170436494
+      },
+      "generation_usage": {
+        "input_tokens": 22909,
+        "output_tokens": 2280,
+        "estimated_cost": null,
+        "cost_scope": "returned answer and sufficiency model calls, including repairs; embedding and requests without usage excluded"
+      },
+      "model_calls_by_stage": {
+        "answer": 19,
+        "sufficiency": 0
+      },
+      "sufficiency": {
+        "decisions": 0,
+        "blocked": 0
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    }
+  }
+}

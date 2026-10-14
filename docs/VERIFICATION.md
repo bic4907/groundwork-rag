@@ -55,3 +55,22 @@
   original server was restarted with the updated API contract.
 
 Partial runs are never presented as completed experiments.
+
+## Context sufficiency addition
+
+- 28 offline tests passed, including gate bypass/pass/block, bounded repair, error
+  classification, unchanged generator inputs, usage retention after failure, API
+  serialization and controlled comparison provenance.
+- JavaScript syntax check passed. GitHub Actions passed for implementation commit 0416e77.
+- Real paired dev experiment: 15 baseline + 15 sufficient, completed on the same clean
+  implementation commit. Negative result: 12 gate abstentions, 3 schema errors, no answers.
+- Additional live browser question displayed the sufficiency stage, missing-fact detail,
+  and abstention. No browser errors/warnings in the inspected flow.
+- One separate diagnostic provider call reproduced empty quotes in a failed gate response.
+  It is excluded from benchmark metrics.
+- Existing GUI evaluation completed before restarting the main localhost server.
+- Main GUI comparison verified at localhost:8000 with both completed dev runs, actual
+  deltas, changed settings, stage call counts, and a zero-answer warning. Screenshot:
+  `docs/images/sufficiency-comparison.jpg`. Console inspection found no errors/warnings.
+- Paired prediction audit confirmed identical retrieved chunks, scores and ordering for
+  all 15 questions. Dev-only public report export completed successfully.
