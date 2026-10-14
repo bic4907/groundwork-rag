@@ -19,7 +19,7 @@ from .pipeline import Pipeline
 from .providers import Models, ProviderError
 from .retrieval import ingest
 from .schemas import QueryRequest, QueryResponse
-from .settings import ROOT, Settings, load_config
+from .settings import ROOT, CONFIG_NAMES, ConfigName, Settings, load_config
 
 app = FastAPI(title='Groundwork API', version='0.1.0', docs_url=None, redoc_url=None)
 pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix='groundwork')
@@ -74,7 +74,7 @@ def status():
                        'embedding': {'provider': s.embedding_provider, 'model': s.embedding_model},
                        'judge': {'provider': s.judge_provider, 'model': s.judge_model}},
             'indexes': [json.loads(p.read_text()) for p in sorted((ROOT / 'runtime/indexes').glob('*/manifest.json'))],
-            'configs': [load_config(x).model_dump() for x in ('baseline', 'hybrid', 'bm25')]}
+            'configs': [load_config(x).model_dump() for x in CONFIG_NAMES]}
 
 
 @app.post('/api/qa', response_model=QueryResponse)
@@ -136,7 +136,9 @@ def gold_detail(question_id: str):
 
 class JobRequest(BaseModel):
     kind: Literal['ingest', 'eval', 'experiment']
-    config: Literal['baseline', 'hybrid', 'bm25'] = 'baseline'
+    config: ConfigName = 'baseline'
+    before_config: ConfigName = 'baseline'
+    after_config: ConfigName = 'hybrid'
     split: Literal['all', 'dev', 'test'] = 'dev'
     judge: bool = False
 
@@ -162,9 +164,10 @@ def start_job(request: JobRequest):
             elif request.kind == 'eval':
                 result = evaluate(request.config, request.split, request.judge, update_progress)
             else:
-                ingest(load_config('baseline'), Models(Settings()))
-                before = evaluate('baseline', request.split, request.judge, update_progress)
-                after = evaluate('hybrid', request.split, request.judge, update_progress)
+                ingest(load_config(request.before_config), Models(Settings()))
+                ingest(load_config(request.after_config), Models(Settings()))
+                before = evaluate(request.before_config, request.split, request.judge, update_progress)
+                after = evaluate(request.after_config, request.split, request.judge, update_progress)
                 result = compare_runs(before['run_id'], after['run_id'], 'test' if request.split != 'dev' else 'dev')
                 write_json(ROOT / 'runtime/comparisons' / (after['run_id'] + '.json'), result)
             with job_lock:

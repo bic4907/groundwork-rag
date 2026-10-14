@@ -35,3 +35,20 @@ def test_mutations_reject_foreign_origins():
 
 def test_dns_rebinding_host_is_rejected():
     assert client.get('/api/status',headers={'Host':'attacker.example'}).status_code==403
+
+
+def test_sufficiency_configuration_and_trace_are_exposed(monkeypatch):
+    from groundwork import api
+    from groundwork.schemas import QueryRequest
+    assert QueryRequest(question='Who is the author?', config='sufficient').config == 'sufficient'
+    assert 'sufficient' in {c['name'] for c in client.get('/api/status').json()['configs']}
+    assert api.JobRequest(kind='experiment', after_config='sufficient').after_config == 'sufficient'
+    from test_pipeline import pipeline_with_responses, decision
+    from groundwork.settings import load_config
+    p = pipeline_with_responses([decision(False)])
+    p.config = load_config('sufficient')
+    monkeypatch.setattr(api, 'Pipeline', lambda *_: p)
+    r = client.post('/api/qa', json={'question': 'When was the algorithm written?', 'config': 'sufficient'})
+    assert r.status_code == 200
+    assert r.json()['sufficiency']['sufficient'] is False
+    assert r.json()['sufficiency_prompt_sha256']

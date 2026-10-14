@@ -1,0 +1,14 @@
+name: sufficient
+retrieval: dense
+top_k: 6
+candidate_k: 24
+rrf_k: 60
+chunk_words: 180
+overlap_sentences: 1
+max_context_chars: 16000
+temperature: 0
+seed: 42
+max_output_tokens: 650
+sufficiency_gate: true
+sufficiency_max_output_tokens: 500
+hypothesis: A separate context-sufficiency gate reduces unsupported answering at the cost of coverage and extra inference, with dense retrieval and the answer generator held fixed.

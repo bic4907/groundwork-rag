@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[2]
+ConfigName = Literal['baseline', 'hybrid', 'bm25', 'sufficient']
+CONFIG_NAMES = ('baseline', 'hybrid', 'bm25', 'sufficient')
 
 
 class Settings(BaseSettings):
@@ -45,6 +47,8 @@ class ExperimentConfig(BaseModel):
     temperature: float = Field(default=0, ge=0, le=2)
     seed: int = 42
     max_output_tokens: int = Field(default=650, ge=100, le=3000)
+    sufficiency_gate: bool = False
+    sufficiency_max_output_tokens: int = Field(default=500, ge=100, le=1500)
     hypothesis: str = ''
 
     @model_validator(mode='after')
@@ -56,6 +60,6 @@ class ExperimentConfig(BaseModel):
 
 def load_config(name: str) -> ExperimentConfig:
     # User input selects a registered config; it is never an arbitrary path.
-    if name not in {'baseline', 'hybrid', 'bm25'}:
+    if name not in CONFIG_NAMES:
         raise ValueError('Unknown experiment configuration')
     return ExperimentConfig.model_validate(yaml.safe_load((ROOT / 'configs' / f'{name}.yaml').read_text()))

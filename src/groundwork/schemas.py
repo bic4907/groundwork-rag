@@ -1,6 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, StrictBool, model_validator
+
+from .settings import ConfigName
 
 
 class Sentence(BaseModel):
@@ -34,6 +36,23 @@ class Claim(BaseModel):
     evidence: list[Evidence] = Field(min_length=1, max_length=6)
 
 
+class SufficiencyDecision(BaseModel):
+    """Inference-time judgment; never receives gold labels or reference answers."""
+    model_config = {'extra': 'forbid'}
+    sufficient: StrictBool
+    reason: str = Field(min_length=1, max_length=1000)
+    missing_facts: list[str] = Field(max_length=8)
+    evidence: list[Evidence] = Field(max_length=8)
+
+    @model_validator(mode='after')
+    def consistent(self):
+        if self.sufficient and (self.missing_facts or not self.evidence):
+            raise ValueError('Sufficient context needs evidence and no missing facts')
+        if not self.sufficient and not any(f.strip() for f in self.missing_facts):
+            raise ValueError('Insufficient context needs an explicit missing fact')
+        return self
+
+
 class GeneratedAnswer(BaseModel):
     status: Literal['answered', 'insufficient_evidence']
     short_answer: str = Field(default='', max_length=500)
@@ -51,7 +70,7 @@ class GeneratedAnswer(BaseModel):
 
 class QueryRequest(BaseModel):
     question: str = Field(min_length=3, max_length=2000)
-    config: Literal['baseline', 'hybrid', 'bm25'] = 'hybrid'
+    config: ConfigName = 'hybrid'
 
 
 class RetrievalHit(BaseModel):
@@ -80,6 +99,8 @@ class QueryResponse(GeneratedAnswer):
     timings: dict[str, float]
     attempts: list[dict]
     validation: dict
+    sufficiency: SufficiencyDecision | None = None
+    sufficiency_prompt_sha256: str | None = None
 
 
 class GoldCase(BaseModel):

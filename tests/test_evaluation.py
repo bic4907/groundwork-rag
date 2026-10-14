@@ -51,3 +51,42 @@ def test_generation_error_preserves_observed_retrieval():
 def test_token_f1_is_multiset_based():
     assert token_f1('the Ada','Ada')==1
     assert token_f1('Ada Ada','Ada')==pytest.approx(2/3)
+
+
+def test_sufficiency_tradeoffs_and_usage_include_returned_calls_on_error():
+    a = row(case(), response('insufficient_evidence'))
+    b = row(case(False), response())
+    c = row(case(), None, 'bad output')
+    c['attempts_on_error'] = [{'stage': 'sufficiency', 'usage': {'input_tokens': 10, 'output_tokens': 2}, 'estimated_cost': .01}]
+    result = summarize([a, b, c])
+    assert result['metrics']['unanswerable_answer_rate'] == 1
+    assert result['metrics']['answerable_abstention_rate'] == .5
+    assert result['metrics']['answered_token_f1'] is None
+    assert result['model_calls_by_stage']['sufficiency'] == 1
+    assert result['generation_usage']['input_tokens'] == 10
+
+
+def test_comparison_records_gate_intervention_and_rejects_bad_provenance(tmp_path, monkeypatch):
+    import json
+    import groundwork.evaluation as ev
+    from groundwork.io import write_json
+    from groundwork.settings import load_config
+    monkeypatch.setattr(ev, 'ROOT', tmp_path)
+    ids = ['20261014T000000Z-baseline-aaaaaa', '20261014T000001Z-sufficient-bbbbbb']
+    manifests = []
+    for run_id, name in zip(ids, ['baseline', 'sufficient']):
+        m = {'status': 'completed', 'config': load_config(name).model_dump(), 'gold_sha256': 'gold',
+             'generation': {'model': 'same'}, 'prompt_sha256': 'same', 'judge': None,
+             'judge_prompt_sha256': 'same', 'index': {'index_id': 'same'},
+             'sufficiency_prompt_sha256': 'gate' if name == 'sufficient' else None,
+             'sufficiency_model': {'model': 'same'} if name == 'sufficient' else None}
+        manifests.append(m)
+        folder = tmp_path / 'runtime/runs' / run_id
+        write_json(folder / 'manifest.json', m)
+        r = {**row(case(), response()), 'id': 'x', 'source_id': 'x', 'question': 'Who?', 'split': 'dev', 'category': 'bridge'}
+        (folder / 'predictions.jsonl').write_text(json.dumps(r)+'\n')
+    assert ev.compare_runs(*ids, split='dev')['changed_settings'] == {'sufficiency_gate': {'before': False, 'after': True}}
+    manifests[1]['sufficiency_model'] = {'model': 'other'}
+    write_json(tmp_path / 'runtime/runs' / ids[1] / 'manifest.json', manifests[1])
+    with pytest.raises(ValueError, match='sufficiency provenance'):
+        ev.compare_runs(*ids, split='dev')

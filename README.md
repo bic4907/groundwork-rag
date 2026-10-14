@@ -201,3 +201,17 @@ Dockerfile도 제공하지만 실제 Docker image 실행 검증 여부는 검증
 
 소프트웨어: MIT. 데이터: HotpotQA 및 Wikipedia에서 파생된 **CC BY-SA 4.0**.
 [데이터 출처와 변경 사항](data/NOTICE.md)을 확인하세요. upstream 저자와의 제휴를 의미하지 않습니다.
+
+## 근거 충분성 베이스라인
+
+`Dense + Sufficiency gate`는 동일 검색 문맥으로 답할 수 있는지 생성 전에 별도로
+판정합니다. 부족하면 답변을 보류하고 누락 사실을 기록합니다. 기존 Dense/Hybrid/BM25는
+그대로 선택할 수 있습니다. 판정 호출의 비용·지연 및 과도한 보류도 함께 측정합니다.
+
+```bash
+uv run groundwork experiment --before baseline --after sufficient --split dev
+```
+
+GUI의 Configuration에서 `Dense + Sufficiency gate`를 선택한 뒤 Before/After를
+실행하면 됩니다. 개발 결과 비교에는 Compare runs의 Split을 Development로 선택하세요.
+[구현 의도·연구 출처·지표·한계](docs/SUFFICIENCY.ko.md)를 참고하세요.

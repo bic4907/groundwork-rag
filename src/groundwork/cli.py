@@ -54,11 +54,13 @@ def compare(before: str, after: str, split: str = 'test', output: Path | None = 
 
 
 @app.command()
-def experiment(split: str = 'all', judge: bool = False):
-    """One-command controlled baseline/hybrid experiment and holdout comparison."""
-    build_index(load_config('baseline'), Models(Settings()))
+def experiment(split: str = 'all', judge: bool = False, before: str = 'baseline', after: str = 'hybrid'):
+    """Run a paired experiment; e.g. --before baseline --after sufficient --split dev."""
+    load_config(before)
+    load_config(after)
     outputs = []
-    for config in ('baseline', 'hybrid'):
+    for config in (before, after):
+        build_index(load_config(config), Models(Settings()))
         outputs.append(evaluate(config, split, judge, lambda x: typer.echo(json.dumps(x))))
     report = compare_runs(outputs[0]['run_id'], outputs[1]['run_id'], 'test' if split != 'dev' else 'dev')
     path = ROOT / 'runtime/comparisons' / (outputs[1]['run_id'] + '.json')
