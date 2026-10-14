@@ -40,5 +40,5 @@ for split,result in comparisons.items():
         values=['N/A' if m[k] is None else f'{m[k]*100:.2f}' for k in ('before','after','delta')]
         table.append(f'| {name} | '+ ' | '.join(values)+' |')
     table.append('')
-atomic_text(target/'METRICS.md','\n'.join(table)+'\n')
+atomic_text(target/'METRICS.md','\n'.join(table).rstrip()+'\n')
 print(target)

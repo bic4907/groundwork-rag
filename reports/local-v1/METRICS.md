@@ -56,4 +56,3 @@ Predictions contain only public benchmark questions and source excerpts (CC BY-S
 | abstention_f1 | 0.00 | 25.00 | 25.00 |
 | error_rate | 8.00 | 4.00 | -4.00 |
 | answer_rate | 80.00 | 84.00 | 4.00 |
-
