@@ -1,0 +1,91 @@
+{
+  "name": "Groundwork Hotpot Mini v1",
+  "upstream": "https://huggingface.co/datasets/hotpotqa/hotpot_qa/resolve/1908d6afbbead072334abe2965f91bd2709910ab/distractor/validation-00000-of-00001.parquet",
+  "upstream_revision": "1908d6afbbead072334abe2965f91bd2709910ab",
+  "upstream_sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+  "license": "CC-BY-SA-4.0",
+  "sampling_version": 1,
+  "documents": 310,
+  "questions": 40,
+  "categories": {
+    "bridge": 12,
+    "comparison": 12,
+    "summary": 8,
+    "unanswerable": 8
+  },
+  "splits": {
+    "dev": 15,
+    "test": 25
+  },
+  "corpus_sha256": "0ba7ba0d530f928d9aff16153ae424da6d6be00958b9b370680e1f3d49e4b4e3",
+  "gold_sha256": "10a8ac73085f72f704df5d08700d082ab9846116d4fcf775b1c9686f08ffa3b5",
+  "withheld_cases": [
+    {
+      "id": "5adf29f05542993344016c09",
+      "answer": "Kramer Guitars",
+      "withheld_titles": [
+        "Henry Vaccaro"
+      ]
+    },
+    {
+      "id": "5a76648f5542992db9473795",
+      "answer": "Blue Origin",
+      "withheld_titles": [
+        "Blue Origin",
+        "Figure 2 Ranch Airport"
+      ]
+    },
+    {
+      "id": "5a80e03e55429938b614222c",
+      "answer": "the attack on Pearl Harbor",
+      "withheld_titles": [
+        "From Here to Eternity"
+      ]
+    },
+    {
+      "id": "5a7cd280554299452d57ba7f",
+      "answer": "Heidi Lynn Gardner",
+      "withheld_titles": [
+        "Heidi Gardner"
+      ]
+    },
+    {
+      "id": "5ae0ff95554299422ee995b0",
+      "answer": "Larry Alphonso Johnson Jr.",
+      "withheld_titles": [
+        "Larry Johnson (running back)"
+      ]
+    },
+    {
+      "id": "5adc6825554299438c868da1",
+      "answer": "Salta",
+      "withheld_titles": [
+        "Governor of Santiago del Estero",
+        "Santiago del Estero Province"
+      ]
+    },
+    {
+      "id": "5abface75542990832d3a196",
+      "answer": "Honey Irani",
+      "withheld_titles": [
+        "Farhan Akhtar"
+      ]
+    },
+    {
+      "id": "5ae6a5d15542991bbc97615d",
+      "answer": "24800 mi",
+      "withheld_titles": [
+        "Inca road system"
+      ]
+    }
+  ],
+  "human_review": "pending",
+  "limitations": [
+    "English Wikipedia introductory paragraphs, historical snapshot.",
+    "Small purposive sample, not an official HotpotQA benchmark score.",
+    "Parent question and derived summary correlated; keep grouped in analysis.",
+    "Controlled absence is easier than naturally ambiguous questions.",
+    "Answer-string absence is not a proof that every alternate inference is impossible.",
+    "Public benchmark may overlap model pretraining."
+  ]
+}

@@ -1,0 +1,12 @@
+name: baseline
+retrieval: dense
+top_k: 6
+candidate_k: 24
+rrf_k: 60
+chunk_words: 180
+overlap_sentences: 1
+max_context_chars: 16000
+temperature: 0
+seed: 42
+max_output_tokens: 650
+hypothesis: Dense semantic retrieval is the baseline for evidence recovery.
