@@ -3,6 +3,7 @@ from pathlib import Path
 
 import typer
 
+from .benchmarking import run_suite
 from .dataset import build_dataset
 from .evaluation import calibration, compare_runs, evaluate, run_folder
 from .io import write_json
@@ -66,6 +67,13 @@ def experiment(split: str = 'all', judge: bool = False, before: str = 'baseline'
     path = ROOT / 'runtime/comparisons' / (outputs[1]['run_id'] + '.json')
     write_json(path, report)
     typer.echo(json.dumps({'comparison': str(path), 'runs': [r['run_id'] for r in outputs], 'metrics': report['metrics']}, indent=2))
+
+
+@app.command()
+def benchmark(split: str = 'all', judge: bool = False):
+    """Evaluate Dense, BM25, Hybrid and Sufficiency sequentially, then compare."""
+    result = run_suite(split, judge, lambda x: typer.echo(json.dumps(x)))
+    typer.echo(json.dumps(result, indent=2))
 
 
 @app.command()

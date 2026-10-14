@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from .benchmarking import run_suite
 from .evaluation import calibration, compare_runs, evaluate, run_folder
 from .io import digest, read_jsonl, write_json
 from .pipeline import Pipeline
@@ -165,7 +166,7 @@ def gold_detail(question_id: str):
 
 
 class JobRequest(BaseModel):
-    kind: Literal['ingest', 'eval', 'experiment']
+    kind: Literal['ingest', 'eval', 'experiment', 'suite']
     config: ConfigName = 'baseline'
     before_config: ConfigName = 'baseline'
     after_config: ConfigName = 'hybrid'
@@ -191,6 +192,8 @@ def start_job(request: JobRequest):
         try:
             if request.kind == 'ingest':
                 result = ingest(load_config(request.config), Models(Settings()))
+            elif request.kind == 'suite':
+                result = run_suite(request.split, request.judge, update_progress)
             elif request.kind == 'eval':
                 result = evaluate(request.config, request.split, request.judge, update_progress)
             else:
