@@ -7,8 +7,10 @@ from groundwork.settings import Settings, load_config
 
 
 def mock_client(monkeypatch, handler):
-    client=httpx.Client
-    monkeypatch.setattr(httpx,'Client',lambda **kw:client(transport=httpx.MockTransport(handler),**kw))
+    class MockClient(httpx.Client):
+        def __init__(self, **kwargs):
+            super().__init__(transport=httpx.MockTransport(handler), **kwargs)
+    monkeypatch.setattr(httpx, 'Client', MockClient)
 
 
 def test_remote_embedding_sorts_indices_and_normalizes(monkeypatch):
@@ -37,7 +39,7 @@ def test_remote_generation_maps_usage_and_does_not_send_seed_by_default(monkeypa
         payload=json.loads(request.content)
         assert 'seed' not in payload
         assert payload['response_format']=={'type':'json_object'}
-        return httpx.Response(200,json={'model':'pinned-fixture','choices':[{'message':{'content':'{}'}}],
+        return httpx.Response(200,json={'model':'pinned-fixture','choices':[{'message':{'role':'assistant','content':'{}'}}],
                                        'usage':{'prompt_tokens':100,'completion_tokens':20}})
     mock_client(monkeypatch,handler)
     models=Models(Settings(generation_provider='remote',generation_base_url='https://models.example/v1',

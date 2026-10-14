@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 
 from .io import atomic_text, digest, git_state, read_jsonl, write_json
 from .pipeline import Pipeline, SYSTEM_PROMPT, SUFFICIENCY_PROMPT
-from .providers import Models, ProviderError
+from .providers import Models, ProviderError, execution_identity
 from .schemas import GoldCase
 from .settings import ROOT, CONFIG_NAMES, ExperimentConfig, Settings, load_config
 
@@ -140,7 +140,7 @@ def evaluate(config_name='baseline', split='all', use_judge=False, progress=None
     folder = ROOT / 'runtime/runs' / run_id
     folder.mkdir(parents=True)
     manifest = {'run_id': run_id, 'status': 'running', 'config': cfg.model_dump(), 'split': split,
-                'limited': bool(limit), 'question_ids': [c.id for c in cases], 'question_count': len(cases),
+                'execution': execution_identity(), 'limited': bool(limit), 'question_ids': [c.id for c in cases], 'question_count': len(cases),
                 'gold_sha256': digest((ROOT / 'data/gold.jsonl').read_bytes()),
                 'index': pipeline.retriever.manifest, 'generation': models.identity('generation'),
                 'judge': models.identity('judge') if use_judge else None,
@@ -266,6 +266,8 @@ def compare_runs(before_id, after_id, split='test'):
                            'delta_ci95_cluster_bootstrap': interval}
     return {'before': before_id, 'after': after_id, 'split': split, 'n': len(rows_a), 'metrics': metrics,
             'changed_settings': changed,
+            'execution_before': a.get('execution', {'framework': 'direct-http'}),
+            'execution_after': b.get('execution', {'framework': 'direct-http'}),
             'usage_before': summary_a['generation_usage'], 'usage_after': summary_b['generation_usage'],
             'model_calls_before': summary_a['model_calls_by_stage'], 'model_calls_after': summary_b['model_calls_by_stage'],
             'hypothesis': b['config']['hypothesis'], 'latency_before': summary_a['latency_ms'], 'latency_after': summary_b['latency_ms'],

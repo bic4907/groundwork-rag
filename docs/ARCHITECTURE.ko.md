@@ -109,11 +109,14 @@ Dense와 BM25의 원점수는 척도가 다르다. RRF는 이 점수들을 직�
 
 ### 모델 어댑터
 
-`Models`는 로컬 Ollama `/api/chat`, `/api/embed` 및 일반적인 hosted
-`/chat/completions`, `/embeddings` 인터페이스를 구현한다. `*_BASE_URL`은 해당 경로
-바로 앞까지 지정한다. 원격 서비스의 지원 스키마나 모델 권한이 다르면 설정 검증이
-필요하다. 로컬 JSON grammar와 모델별 schema grammar의 호환성 차이 때문에 JSON
-출력 모드 후 Pydantic 검증을 사용한다.
+`Models`의 생성·충분성 판정·Judge 호출은 `langchain_models.py`를 통한다.
+`ChatPromptTemplate | ChatOpenRouter/ChatOpenAI/ChatOllama`를 구성하고 동기는
+`invoke`, 스트리밍은 `stream`으로 실행한다. OpenRouter는 공식 전용 통합을 사용한다.
+JSON object 출력 모드 뒤 기존 Pydantic·인용 검사를 적용하며 프롬프트나 수리 횟수는 같다.
+
+검색은 기존 `Retriever.search`를 `RunnableLambda`로 연결한다. 임베딩 `/api/embed`,
+`/embeddings` 어댑터와 prefix·정규화·캐시·인덱스는 유지한다. LangSmith 자동 추적은
+비활성화한다. 설정과 검증 근거는 [LangChain 전환 문서](LANGCHAIN.ko.md)에 있다.
 
 429/5xx/네트워크 실패는 최대 3번 시도하고 bounded exponential backoff를 둔다.
 다른 HTTP 오류는 재시도하지 않는다. 오류 메시지에 응답 본문·Authorization·URL을
@@ -177,7 +180,7 @@ durable queue를 추가해야 한다.
 | 공개 근거 라벨이 있는 데이터 | 근거 회수율을 정확히 정의 | 도메인 편향, 학습 데이터 중복 |
 | 문장 기반 Gold 근거 | 청킹 변경과 독립적인 평가 | 문장 일부만 필요한 경우 coarse label |
 | 정확 벡터 검색 | 재현 가능하고 구현이 명확 | 대규모에 선형 비용 |
-| 직접 작성한 작은 pipeline | 각 단계와 실패를 설명 가능 | 운영 기능을 직접 관리 |
+| LangChain 모델 통합 + 명시적 단계 제어 | 모델 교체와 기존 평가 계약 유지 | SDK 변경에 대한 계약 검사 필요 |
 | 구조화 claim + exact quote | 출처 감사와 조작 검사가 쉬움 | 의미적 entailment는 별도 검사 |
 | 로컬 및 원격 provider | 키 없이 실행, 모델 교체 용이 | 모델별 API 차이 |
 | 단일 origin GUI | 배포와 키 경계를 단순화 | 여러 사용자 서비스에는 확장 필요 |

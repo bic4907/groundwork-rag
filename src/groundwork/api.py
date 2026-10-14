@@ -18,7 +18,7 @@ from .benchmarking import run_suite
 from .evaluation import calibration, compare_runs, evaluate, run_folder
 from .io import digest, read_jsonl, write_json
 from .pipeline import Pipeline
-from .providers import Models, ProviderError, StreamCancelled, check_cancelled
+from .providers import Models, ProviderError, StreamCancelled, check_cancelled, execution_identity
 from .retrieval import ingest
 from .schemas import QueryRequest, QueryResponse
 from .settings import ROOT, CONFIG_NAMES, ConfigName, Settings, load_config
@@ -71,7 +71,7 @@ async def invalid_request(request, exc):
 def status():
     s = Settings()
     manifest_path = ROOT / 'data/manifest.json'
-    return {'name': 'Groundwork', 'dataset': json.loads(manifest_path.read_text()) if manifest_path.exists() else None,
+    return {'name': 'Groundwork', 'execution': execution_identity(), 'dataset': json.loads(manifest_path.read_text()) if manifest_path.exists() else None,
             'models': {'generation': {'provider': s.generation_provider, 'model': s.generation_model},
                        'embedding': {'provider': s.embedding_provider, 'model': s.embedding_model},
                        'judge': {'provider': s.judge_provider, 'model': s.judge_model}},

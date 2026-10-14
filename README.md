@@ -3,7 +3,7 @@
 **Ask with evidence. Measure what changes.**
 
 문서 기반 RAG QA, 인용 추적 GUI, Gold Set 평가, 통제된 검색 개선 실험을 제공하는
-Python 프로젝트입니다. 로컬 Ollama와 원격 모델 API를 지원합니다.
+Python 프로젝트입니다. LangChain 기반 생성 파이프라인으로 로컬 Ollama와 원격 모델 API를 지원합니다.
 
 ![실제 평가 실행의 Before/After 비교](docs/images/sonnet-comparison.jpg)
 
@@ -12,7 +12,7 @@ Python 프로젝트입니다. 로컬 Ollama와 원격 모델 API를 지원합니
 - 공개 문서 **310개**, 문장 단위 Gold 근거가 있는 **40개 질문**.
 - 문장 경계 청킹, 임베딩 캐시, 체크섬을 가진 불변 벡터 인덱스.
 - Dense / BM25 / Hybrid(RRF) 검색, 근거 기반 생성, 주장별 인용과 exact-quote 검증.
-- 명시적 답변 보류, 출력 수리, API 오류와 보류의 구분.
+- LangChain ChatPromptTemplate/Runnable과 공식 모델 통합, 명시적 답변 보류와 출력 수리.
 - FastAPI 요청·응답 schema, 검색 단계 SSE 및 답변 토큰 streaming, 생성 중지.
 - 질문·근거·문서 탐색·실험·결과 비교·사람 검토를 제공하는 웹 GUI.
 - 전체 Gold Set 단일 명령 평가, 질문별 결과, 범주/split별 지표, paired comparison.
@@ -160,6 +160,8 @@ CLI의 `benchmark`도 같은 경로를 사용하며 `runtime/suites/`에 진행�
 
 현재 공개 평가의 생성·충분성 모델은 OpenRouter **`anthropic/claude-sonnet-5.5`**,
 임베딩은 로컬 Nomic입니다. 각 방식 40문항을 실제 실행했습니다.
+아래 수치는 **LangChain 전환 전 직접 HTTP 구현**에서 측정한 기록입니다. 전환 후에는
+검색 결과 일치와 실제 모델 동작을 검증했으며, 전체 생성 품질 평가는 재실행하지 않았습니다.
 
 | 방식 | Test 근거 회수율 | Test 답변 F1 | Test 오류율 | Test 중앙 지연 |
 | --- | ---: | ---: | ---: | ---: |
@@ -180,7 +182,8 @@ Test는 25문항이며 답변 F1 분모는 답변 가능한 20문항입니다. �
 src/groundwork/
   dataset.py       고정된 공개 데이터 → Corpus / Gold
   retrieval.py     청킹 / embedding cache / index / 검색
-  providers.py     로컬·원격 모델 어댑터
+  providers.py     모델 facade / 기존 임베딩 어댑터
+  langchain_models.py  공식 LangChain 채팅 통합 / 스트림·사용량 계약
   pipeline.py      생성 / 인용 검사 / 보류
   schemas.py       요청·응답 및 데이터 계약
   evaluation.py    지표 / Judge / 실행 / 비교 / 사람 정합성
@@ -195,6 +198,7 @@ reports/           선별한 실제 공개 benchmark 측정
 ```
 
 - [구현 방식과 설계 의도](docs/ARCHITECTURE.ko.md): 컴포넌트별 동작, 왜 선택했는지, tradeoff.
+- [LangChain 전환](docs/LANGCHAIN.ko.md): 유지한 검색·평가 조건, 모델 통합과 검증 결과.
 - [평가 설계와 한계](docs/EVALUATION.ko.md): 지표의 정확한 분모, Judge 신뢰성, CI 설계.
 - [공개 데이터 조사](docs/DATASETS.ko.md): HotpotQA, SQuAD2, RGB, 공식 문서 후보 비교.
 - [요구사항 대응표](docs/REQUIREMENTS.md): 요구사항과 구현·검증 위치.

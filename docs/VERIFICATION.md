@@ -1,6 +1,6 @@
 # Verification record
 
-## Current evaluation: Sonnet
+## Published evaluation: Sonnet (before LangChain migration)
 
 - The active benchmark is `reports/sonnet-v1/`: Dense, BM25, Hybrid and Dense with
   a sufficiency gate, each evaluated on all 40 questions (160 executions).
@@ -41,6 +41,23 @@
   the corpus, chunks, vectors and index hashes.
 - Publication scan checks tracked environment files, credential-like patterns and
   restricted wording without printing matched secret values.
+
+## LangChain migration verification
+
+- 47 offline tests passed after migrating generation, sufficiency and judge model calls
+  to official LangChain integrations. Contract tests cover unchanged messages, JSON mode,
+  generation parameters, streaming callbacks, raw usage, bounded retries and Ollama options.
+  Existing cancellation, truncated-stream, repair, metrics and sequential suite tests passed.
+- Replayed retrieval for all 160 stored question/configuration pairs: chunk IDs, content,
+  scores and ordering matched exactly. Corpus, Gold, configurations, retrieval implementation,
+  index manifest and generation/sufficiency/judge prompt hashes were unchanged.
+- Live OpenRouter Sonnet calls verified Dense synchronous answering and Sufficiency streaming,
+  including the gate, citations and token usage. GUI Dense summary streaming showed an
+  incomplete draft followed by “인용 검증됨”; inspected console had no errors/warnings.
+  Screenshot: `docs/images/langchain-streaming.jpg`.
+- New manifests record `execution.framework` and integration versions; comparisons expose
+  before/after execution metadata. Historical reports remain unchanged and represent the
+  previous direct HTTP implementation. No full paid answer-quality evaluation was rerun.
 
 ## Limits
 

@@ -11,7 +11,10 @@ GUI에서 질문하면 검색 문서를 먼저 표시하고 답변 텍스트를 
 
 `POST /api/qa/stream`은 기존 질문 요청(`question`, `config`)을 받고 SSE를 반환한다.
 POST이므로 브라우저는 fetch의 ReadableStream을 사용한다. 원격 모델의 SSE와 Ollama의
-NDJSON을 공통 이벤트로 변환한다. 모델의 delta가 여러 토큰을 묶을 수 있다.
+NDJSON은 공식 LangChain 모델의 `stream()`으로 읽고 공통 이벤트로 변환한다.
+HTTP 응답 observer가 원본 종료 마커와 usage를 확인해 SDK가 잘린 응답을 정상 종료로
+취급하거나 누락된 usage를 0으로 채우더라도 기존 계약을 유지한다.
+모델의 delta가 여러 토큰을 묶을 수 있다.
 
 | 이벤트 | 의미 |
 | --- | --- |

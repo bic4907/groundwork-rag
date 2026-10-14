@@ -85,7 +85,7 @@ def test_broken_stream_never_replays_or_returns_a_success(ending,monkeypatch):
 def test_ollama_ndjson_stream_and_usage(monkeypatch):
     def handler(request):
         assert json.loads(request.content)['stream'] is True
-        return httpx.Response(200,content=b'{"message":{"content":"{}"},"done":false}\n{"message":{"content":""},"done":true,"prompt_eval_count":7,"eval_count":2}\n')
+        return httpx.Response(200,content=b'{"message":{"role":"assistant","content":"{}"},"done":false}\n{"message":{"role":"assistant","content":""},"done":true,"prompt_eval_count":7,"eval_count":2}\n')
     mock_client(monkeypatch,handler)
     seen=[]
     result=Models(Settings(generation_provider='ollama')).chat_stream([],{},load_config('baseline'),seen.append)

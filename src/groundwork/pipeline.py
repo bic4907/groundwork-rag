@@ -4,6 +4,8 @@ import time
 import uuid
 
 from pydantic import ValidationError
+from langchain_core.runnables import RunnableLambda
+from langsmith import tracing_context
 
 from .io import digest
 from .providers import Models, ProviderError, check_cancelled
@@ -69,7 +71,9 @@ class Pipeline:
         emit = on_stage or (lambda *_: None)
         check_cancelled(cancelled)
         emit('retrieving', {})
-        hits = self.retriever.search(question)
+        # Preserve search scoring/order/context budget while exposing a Runnable stage.
+        with tracing_context(enabled=False):
+            hits = RunnableLambda(self.retriever.search, name='retrieve_evidence').invoke(question)
         check_cancelled(cancelled)
         search_ms = (time.perf_counter() - start) * 1000
         emit('evidence', {'hits': hits})
