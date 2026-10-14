@@ -5,6 +5,8 @@
 문서 기반 RAG QA, 인용 추적 GUI, Gold Set 평가, 통제된 검색 개선 실험을 제공하는
 Python 프로젝트입니다. 로컬 Ollama와 원격 모델 API를 지원합니다.
 
+![실제 평가 실행의 Before/After 비교](docs/images/experiment-comparison.jpg)
+
 ## 포함된 기능
 
 - 공개 문서 **310개**, 문장 단위 Gold 근거가 있는 **40개 질문**.
@@ -139,9 +141,12 @@ Citation Support를 계산합니다. **Token F1은 의미적 정답성이 아니
 - **Hypothesis:** 정확한 이름·표현을 검색하는 BM25를 Dense에 RRF로 결합하면 근거
   회수율과 답변 품질이 개선될 수 있다.
 - **Control:** 모델, 데이터, 청킹, top-k=6, 문맥 본문 16,000자, 생성 설정 및 prompt 고정.
-- **Result:** 실제 실행이 완료된 뒤 [`reports/`](reports/)에 정량 결과와 질문별 기록을 게시합니다.
-- **Analysis:** 전체 평균, test split, 질문 범주, 실패·악화 사례를 함께 봅니다. 개선되지 않은
-  실험도 기록하며 score가 오른다는 이유만으로 일반화하지 않습니다.
+- **Result:** 두 설정에서 각 40개 질문을 실제 실행했습니다. test 25개에서 Evidence Recall은
+  **95.0% → 92.5%**, Answer Token F1은 **43.49% → 47.28%**였습니다.
+  [측정 표](reports/local-v1/METRICS.md)와 [원인 분석](reports/local-v1/ANALYSIS.ko.md)을 공개했습니다.
+- **Analysis:** lexical distractor가 bridge 문서를 밀어내 recall이 하락한 사례가 있었습니다.
+  전체 no-answer 8개 중 올바른 보류는 양쪽 모두 1개로 낮았습니다. Token F1 상승을 의미적
+  정답성 향상으로 간주하지 않으며, 이 로컬 baseline의 보류 신뢰성은 아직 부족합니다.
 - **Next steps:** 다중 문서 추론용 반복 검색, reranker, 독립 Judge와 실제 사람 검수,
   한국어/도메인 데이터, 더 큰 holdout 및 반복 실행.
 

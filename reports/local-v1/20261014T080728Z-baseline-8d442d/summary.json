@@ -1,0 +1,221 @@
+{
+  "n": 40,
+  "answerable_n": 32,
+  "unanswerable_n": 8,
+  "metrics": {
+    "evidence_recall": 0.96875,
+    "all_evidence_found": 0.9375,
+    "answer_token_f1": 0.39561553694532414,
+    "answer_exact_match": 0.25,
+    "citation_validity": 1.0,
+    "judge_correctness": null,
+    "citation_support": null,
+    "abstention_precision": 0.14285714285714285,
+    "abstention_recall": 0.125,
+    "abstention_f1": 0.13333333333333333,
+    "error_rate": 0.05,
+    "answer_rate": 0.775
+  },
+  "latency_ms": {
+    "p50": 13548.750812420622,
+    "p95": 23521.46029036956
+  },
+  "generation_usage": {
+    "input_tokens": 52985,
+    "output_tokens": 5594,
+    "estimated_cost": null,
+    "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+  },
+  "judge_coverage": 0.0,
+  "judge_errors": 0,
+  "by_category": {
+    "bridge": {
+      "n": 12,
+      "answerable_n": 12,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 0.9166666666666666,
+        "all_evidence_found": 0.8333333333333334,
+        "answer_token_f1": 0.5277777777777778,
+        "answer_exact_match": 0.4166666666666667,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.0,
+        "answer_rate": 0.8333333333333334
+      },
+      "latency_ms": {
+        "p50": 12060.23697881028,
+        "p95": 17939.10174847114
+      },
+      "generation_usage": {
+        "input_tokens": 15336,
+        "output_tokens": 1270,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "comparison": {
+      "n": 12,
+      "answerable_n": 12,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.2916666666666667,
+        "answer_exact_match": 0.25,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.08333333333333333,
+        "answer_rate": 0.75
+      },
+      "latency_ms": {
+        "p50": 15321.18129124865,
+        "p95": 28320.466302684494
+      },
+      "generation_usage": {
+        "input_tokens": 15066,
+        "output_tokens": 1894,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "summary": {
+      "n": 8,
+      "answerable_n": 8,
+      "unanswerable_n": 0,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.35329548111463005,
+        "answer_exact_match": 0.0,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": null,
+        "abstention_f1": 0.0,
+        "error_rate": 0.0,
+        "answer_rate": 0.75
+      },
+      "latency_ms": {
+        "p50": 15372.998645994812,
+        "p95": 26986.023265146647
+      },
+      "generation_usage": {
+        "input_tokens": 13613,
+        "output_tokens": 1689,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "unanswerable": {
+      "n": 8,
+      "answerable_n": 0,
+      "unanswerable_n": 8,
+      "metrics": {
+        "evidence_recall": null,
+        "all_evidence_found": null,
+        "answer_token_f1": null,
+        "answer_exact_match": null,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 1.0,
+        "abstention_recall": 0.125,
+        "abstention_f1": 0.2222222222222222,
+        "error_rate": 0.125,
+        "answer_rate": 0.75
+      },
+      "latency_ms": {
+        "p50": 11146.897062659264,
+        "p95": 16883.25107078999
+      },
+      "generation_usage": {
+        "input_tokens": 8970,
+        "output_tokens": 741,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    }
+  },
+  "by_split": {
+    "dev": {
+      "n": 15,
+      "answerable_n": 12,
+      "unanswerable_n": 3,
+      "metrics": {
+        "evidence_recall": 1.0,
+        "all_evidence_found": 1.0,
+        "answer_token_f1": 0.33012184033460623,
+        "answer_exact_match": 0.16666666666666666,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.25,
+        "abstention_recall": 0.3333333333333333,
+        "abstention_f1": 0.2857142857142857,
+        "error_rate": 0.0,
+        "answer_rate": 0.7333333333333333
+      },
+      "latency_ms": {
+        "p50": 13447.539916727692,
+        "p95": 24758.639962738373
+      },
+      "generation_usage": {
+        "input_tokens": 22909,
+        "output_tokens": 2280,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    },
+    "test": {
+      "n": 25,
+      "answerable_n": 20,
+      "unanswerable_n": 5,
+      "metrics": {
+        "evidence_recall": 0.95,
+        "all_evidence_found": 0.9,
+        "answer_token_f1": 0.43491175491175493,
+        "answer_exact_match": 0.3,
+        "citation_validity": 1.0,
+        "judge_correctness": null,
+        "citation_support": null,
+        "abstention_precision": 0.0,
+        "abstention_recall": 0.0,
+        "abstention_f1": 0.0,
+        "error_rate": 0.08,
+        "answer_rate": 0.8
+      },
+      "latency_ms": {
+        "p50": 13651.791790965945,
+        "p95": 23032.34208412468
+      },
+      "generation_usage": {
+        "input_tokens": 30076,
+        "output_tokens": 3314,
+        "estimated_cost": null,
+        "cost_scope": "successful generation responses only; embedding and failed calls excluded"
+      },
+      "judge_coverage": 0.0,
+      "judge_errors": 0
+    }
+  }
+}
